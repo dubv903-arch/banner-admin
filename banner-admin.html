@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>N+ 스토어 배너 관리 시스템</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/npm/pretendard@latest/dist/web/variable/pretendardvariable.css');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #03C75A;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-400: #9ca3af;
+    --gray-600: #4b5563;
+    --gray-800: #1f2937;
+    --blue: #4f46e5;
+    --blue-light: #eef2ff;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+  }
+
+  body {
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, sans-serif;
+    background: var(--gray-100);
+    color: var(--gray-800);
+    min-height: 100vh;
+  }
+
+  /* ─── Header ─── */
+  .header {
+    background: #fff;
+    border-bottom: 1px solid var(--gray-200);
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .header-logo .badge {
+    background: var(--green);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .header-info {
+    font-size: 13px;
+    color: var(--gray-400);
+  }
+
+  /* ─── Layout ─── */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 510px;
+    gap: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 28px 32px;
+  }
+
+  /* ─── Panel ─── */
+  .panel {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
+    overflow: hidden;
+  }
+  .panel-header {
+    padding: 14px 34px;
+    background: #4D47DD;
+    border-bottom: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .panel-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .panel-title .count {
+    background: #fff;
+    color: #4D47DD;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 20px;
+  }
+
+  /* ─── Form ─── */
+  .form-wrap {
+    border-bottom: 1px solid var(--gray-200);
+    background: var(--gray-50);
+  }
+  .form-section {
+    padding: 30px 34px;
+  }
+  .form-step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: #4D47DD;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 50%;
+    margin-right: 3px;
+    flex-shrink: 0;
+  }
+  .form-section-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .form-divider {
+    height: 1px;
+    background: var(--gray-200);
+    margin: 0 34px;
+  }
+  .type-selector {
+    display: flex;
+    gap: 8px;
+  }
+  .type-btn {
+    flex: 1;
+    padding: 9px 0;
+    border-radius: 8px;
+    border: 1.5px solid var(--gray-200);
+    background: #fff;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-400);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .type-btn.active {
+    border-color: var(--blue);
+    background: var(--blue-light);
+    color: var(--blue);
+  }
+  .product-thumb {
+    width: 70px; height: 70px;
+    border-radius: 4px;
+    object-fit: cover;
+    display: block;
+  }
+  .product-badge {
+    position: absolute;
+    top: 0; left: 0;
+    background: #ff3d25;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-radius: 4px 0 4px 0;
+    line-height: 1;
+    font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  }
+  .banner-slide-logo {
+    position: absolute;
+    left: 16px;
+    top: 57px;
+    width: 230px;
+    height: auto;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .form-group.full { grid-column: 1 / -1; }
+  label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-600);
+    letter-spacing: 0.02em;
+  }
+  label .required { color: var(--red); margin-left: 2px; }
+  input[type="text"], input[type="url"], textarea, select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--gray-800);
+    background: #fff;
+    transition: border-color 0.15s;
+    outline: none;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(79,70,229,.08);
+  }
+  textarea { resize: vertical; min-height: 64px; line-height: 1.5; }
+
+  .img-upload-area {
+    border: 2px dashed var(--gray-200);
+    border-radius: 8px;
+    background: #fff;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+  }
+  .img-upload-area:hover { border-color: var(--blue); background: var(--blue-light); }
+  .img-upload-area input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .img-upload-area .upload-icon { margin-bottom: 10px; line-height: 0; }
+  .img-upload-area .upload-text { font-size: 13px; color: var(--gray-400); }
+  .img-upload-area .upload-text strong { color: var(--blue); }
+  .img-preview {
+    width: 375px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 0;
+    display: none;
+    margin-top: 8px;
+    align-self: center;
+  }
+  .logo-preview {
+    display: none;
+    margin-top: 8px;
+    max-width: 230px;
+    height: auto;
+    border-radius: 6px;
+    background: repeating-conic-gradient(#e5e7eb 0% 25%, #fff 0% 50%) 0 0 / 12px 12px;
+  }
+
+  .char-count { font-size: 11px; color: var(--gray-400); text-align: right; margin-top: 3px; }
+
+  .color-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  input[type="color"] {
+    width: 36px; height: 36px; padding: 2px; border-radius: 6px;
+    border: 1px solid var(--gray-200); cursor: pointer; background: #fff;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 28px;
+    justify-content: center;
+  }
+  .btn {
+    padding: 9px 20px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: #212936; color: #fff; justify-content: center; padding: 6px 14px; font-size: 12px; }
+  .btn-secondary { background: var(--gray-100); color: var(--gray-600); }
+  .btn-danger { background: var(--red-light); color: var(--red); }
+
+  /* ─── Banner List ─── */
+  .banner-list { padding: 16px 34px; }
+  .banner-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    background: #fff;
+    cursor: grab;
+    transition: box-shadow 0.15s, border-color 0.15s;
+    position: relative;
+  }
+  .banner-item:hover { box-shadow: 0 2px 12px rgba(0,0,0,.08); border-color: var(--blue); }
+  .banner-item.dragging { opacity: 0.4; }
+  .banner-item.drag-over { border-color: var(--green); box-shadow: 0 0 0 2px rgba(3,199,90,.2); }
+  .banner-item.active { border-color: var(--blue); box-shadow: 0 0 0 2px rgba(79,70,229,.1); }
+
+  .drag-handle {
+    color: var(--gray-400);
+    font-size: 16px;
+    cursor: grab;
+    padding: 0 4px;
+    flex-shrink: 0;
+  }
+  .banner-thumb {
+    width: 72px;
+    height: 36px;
+    border-radius: 6px;
+    object-fit: cover;
+    background: var(--gray-100);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--gray-400);
+    overflow: hidden;
+  }
+  .banner-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .banner-info { flex: 1; min-width: 0; }
+  .banner-info-title {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .banner-info-sub {
+    font-size: 11px;
+    color: var(--gray-400);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .banner-order {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gray-400);
+    background: var(--gray-100);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .banner-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .icon-btn {
+    height: 28px; border-radius: 6px; border: none;
+    padding: 0 9px;
+    cursor: pointer; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center;
+    transition: background 0.1s;
+  }
+  .icon-btn.edit { background: var(--blue-light); color: var(--blue); }
+  .icon-btn.delete { background: var(--red-light); color: var(--red); }
+  .icon-btn:hover { opacity: 0.75; }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gray-400);
+  }
+  .empty-state .icon { font-size: 36px; margin-bottom: 10px; }
+  .empty-state p { font-size: 14px; }
+
+  /* ─── Preview ─── */
+  .preview-wrap { position: sticky; top: 88px; }
+  .preview-panel { padding: 0; display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .preview-panel > :not(.panel-header) { margin: 24px 34px; }
+  .preview-panel > :not(.panel-header):last-child { margin-bottom: 24px; }
+
+  .phone-frame {
+    width: 391px;
+    height: 828px;
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,.18);
+    background: #fff;
+    position: relative;
+    border: 8px solid #1a1a1a;
+    flex-shrink: 0;
+  }
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  .phone-bg {
+    display: block;
+    width: 375px;
+    height: auto;
+    position: absolute;
+    top: 0; left: 0;
+  }
+
+  /* status bar */
+  .status-bar {
+    height: 44px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .status-icons { display: flex; gap: 5px; align-items: center; font-size: 13px; }
+
+  /* app header */
+  .app-header {
+    background: #fff;
+    padding: 8px 16px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .naver-logo {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 18px; font-weight: 900; color: #03C75A;
+  }
+  .naver-logo span { color: var(--gray-800); font-size: 18px; font-weight: 700; }
+  .nplus-badge {
+    background: var(--green); color: #fff;
+    font-size: 9px; font-weight: 800;
+    padding: 1px 4px; border-radius: 3px;
+    margin-right: 1px;
+  }
+  .cart-icon { font-size: 22px; position: relative; cursor: pointer; }
+  .cart-badge {
+    position: absolute; top: -4px; right: -6px;
+    background: var(--red); color: #fff;
+    font-size: 9px; font-weight: 800;
+    width: 16px; height: 16px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* search */
+  .search-bar {
+    margin: 0 16px 10px;
+    background: var(--gray-100);
+    border-radius: 8px;
+    padding: 9px 14px;
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--gray-400);
+  }
+
+  /* nav tabs */
+  .nav-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--gray-200);
+    padding: 0 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    padding: 8px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--gray-400);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+  .nav-tab.active { color: var(--gray-800); border-bottom-color: var(--gray-800); }
+
+  /* ─── Banner Carousel ─── */
+  .banner-carousel {
+    width: 375px;
+    height: 180px;
+    position: absolute;
+    top: 150px;
+    left: 0;
+    overflow: hidden;
+  }
+  .banner-slides {
+    display: flex;
+    height: 100%;
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .banner-slide {
+    min-width: 375px;
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  .banner-slide-bg {
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-color: #c8e6f5;
+  }
+  .banner-slide-gradient {
+    display: none;
+  }
+  .banner-slide-content {
+    position: absolute;
+    left: 16px;
+    top: 46px;
+    width: 234px;
+  }
+  .banner-slide-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 32px;
+    letter-spacing: -0.5px;
+    white-space: pre-line;
+    word-break: keep-all;
+  }
+  .banner-slide-sub {
+    font-size: 14px;
+    font-weight: 400;
+    color: #fff;
+    line-height: 17px;
+    letter-spacing: -0.5px;
+    margin-top: 8px;
+  }
+  .banner-indicator {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .indicator-pill {
+    background: transparent;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    width: 63px;
+    flex-shrink: 0;
+    gap: 1px;
+  }
+  .indicator-play {
+    width: 22px;
+    height: 21px;
+    flex-shrink: 0;
+    background: rgba(0,0,0,.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .indicator-play-icon {
+    width: 14px; height: 14px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 2px;
+  }
+  .pause-bar {
+    width: 2px; height: 8px; background: #fff; border-radius: 2px;
+  }
+  .indicator-num {
+    flex: 1;
+    height: 21px;
+    padding: 0 8px 0 4px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0;
+    background: rgba(0,0,0,.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .indicator-num .slash { font-weight: 500; font-size: 11px; margin: 0 1px; }
+  .indicator-num .total { font-weight: 500; font-size: 12px; }
+
+  .banner-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-400);
+    font-size: 13px;
+    gap: 8px;
+  }
+  .banner-placeholder .icon { font-size: 32px; }
+
+  /* preview controls */
+  .preview-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+  .preview-label { font-size: 13px; color: var(--gray-600); font-weight: 600; flex: 1; }
+  .preview-nav {
+    display: flex;
+    gap: 4px;
+  }
+  .prev-btn, .next-btn {
+    width: 32px; height: 32px; border-radius: 8px;
+    border: 1px solid var(--gray-200);
+    background: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.1s;
+  }
+  .prev-btn:hover, .next-btn:hover { background: var(--gray-100); }
+
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--gray-800); color: #fff;
+    padding: 12px 20px; border-radius: 10px;
+    font-size: 13px; font-weight: 600;
+    opacity: 0; transition: all 0.3s; pointer-events: none;
+    z-index: 9999;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 960px) {
+    .layout { grid-template-columns: 1fr; }
+    .preview-wrap { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-logo">
+    <img src="logo-area.png" alt="Logo" height="20">
+    <span style="width:1px;height:16px;background:var(--gray-200);margin:0 4px;"></span>
+    네이버플러스스토어 최상단 배너 관리
+  </div>
+  <span class="header-info">모바일 메인 홈 · 상단 배너 등록 시스템</span>
+</header>
+
+<div class="layout">
+
+  <!-- Left: 관리 패널 -->
+  <div>
+    <!-- 등록 폼 -->
+    <div class="panel" style="margin-bottom:20px;">
+      <div class="panel-header">
+        <span class="panel-title" id="form-title">배너 등록</span>
+      </div>
+
+      <!-- 배너 유형 선택 -->
+      <div class="form-section" style="padding-bottom:26px;">
+        <div class="form-section-label"><span class="form-step">1</span> 배너 유형</div>
+        <div class="type-selector">
+          <button class="type-btn active" id="typeBtn_text" onclick="setType('text')">텍스트형</button>
+          <button class="type-btn" id="typeBtn_logo" onclick="setType('logo')">로고형</button>
+          <button class="type-btn" id="typeBtn_product" onclick="setType('product')">상품조합형(텍스트)</button>
+          <button class="type-btn" id="typeBtn_product_logo" onclick="setType('product-logo')">상품조합형(로고)</button>
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <!-- 섹션 1: 배너 이미지 -->
+      <div class="form-section">
+        <div class="form-section-label"><span class="form-step">2</span> 배너 이미지</div>
+        <div class="form-group full">
+          <div class="img-upload-area" id="uploadArea">
+            <input type="file" accept="image/*" id="fileInput" onchange="handleFileChange(event)">
+            <div class="upload-icon"><img src="upload-icon.svg" width="30" height="30" alt="upload"></div>
+            <div class="upload-text"><strong>클릭하여 업로드</strong> <strong style="color:var(--gray-400);">또는 </strong><strong style="color:var(--blue);">파일을 드래그</strong><strong style="color:var(--gray-400);">하세요</strong></div>
+            <div class="upload-text" style="margin-top:8px;font-size:11px;text-align:center;">등록 이미지 사이즈 : 1152 x 540px<br>파일 형식 : jpg, png</div>
+          </div>
+          <img id="imgPreview" class="img-preview" src="" alt="미리보기">
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <!-- 섹션 2-A: 타이틀 (텍스트형 / 상품조합형) -->
+      <div class="form-section" id="section-title">
+        <div class="form-section-label"><span class="form-step">3</span> 타이틀</div>
+        <div class="form-group full">
+          <label>1줄</label>
+          <input type="text" id="titleLine1" placeholder="" maxlength="12" oninput="updateCharCount(this, 'titleCount1'); livePreview()">
+          <div class="char-count"><span id="titleCount1">0</span> / 12자</div>
+        </div>
+        <div class="form-group full" style="margin-top:10px;" id="titleLine2Wrap">
+          <label>2줄</label>
+          <input type="text" id="titleLine2" placeholder="" maxlength="12" oninput="updateCharCount(this, 'titleCount2'); livePreview()">
+          <div class="char-count"><span id="titleCount2">0</span> / 12자</div>
+        </div>
+      </div>
+
+      <!-- 섹션 2-B: 로고 이미지 (로고형) -->
+      <div class="form-section" id="section-logo" style="display:none;">
+        <div class="form-section-label"><span class="form-step">3</span> 로고 이미지</div>
+        <div class="form-group full">
+          <div class="img-upload-area" id="logoUploadArea">
+            <input type="file" accept="image/*" id="logoFileInput" onchange="handleLogoFileChange(event)">
+            <div class="upload-icon"><img src="upload-icon.svg" width="30" height="30" alt="upload"></div>
+            <div class="upload-text"><strong>클릭하여 업로드</strong> <strong style="color:var(--gray-400);">또는 </strong><strong style="color:var(--blue);">파일을 드래그</strong><strong style="color:var(--gray-400);">하세요</strong></div>
+            <div class="upload-text" id="logoSizeText" style="margin-top:4px;font-size:11px;">로고 등록 사이즈 : W 690 x H 제한없음 (최대330px까지 허용)</div>
+          </div>
+          <img id="logoPreview" class="logo-preview" src="" alt="로고 미리보기">
+        </div>
+      </div>
+
+
+      <div class="form-divider"></div>
+
+      <!-- 섹션 3: 서브 텍스트 -->
+      <div class="form-section">
+        <div class="form-section-label"><span class="form-step">4</span> 서브 텍스트</div>
+        <div class="form-group full">
+          <input type="text" id="subTextInput" placeholder="" maxlength="30" oninput="updateCharCount(this, 'subCount'); livePreview()">
+          <div class="char-count"><span id="subCount">0</span> / 30자</div>
+        </div>
+      </div>
+
+      <div class="form-section" style="padding-top:0;">
+        <input type="hidden" id="editIndex" value="-1">
+        <div class="form-actions">
+          <button class="btn btn-secondary" onclick="resetForm()">초기화</button>
+          <button class="btn btn-primary" style="width:300px;" onclick="saveBanner()">
+            <span id="save-btn-text">배너 저장</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 배너 목록 -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">배너 목록 <span class="count" id="bannerCount">0</span></span>
+        <span style="font-size:12px;color:rgba(255,255,255,0.8);">드래그로 순서 변경</span>
+      </div>
+      <div class="banner-list" id="bannerList">
+        <div class="empty-state" id="emptyState">
+          <div class="icon">📋</div>
+          <p>등록된 배너가 없습니다.<br>위 폼에서 배너를 추가하세요.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: 미리보기 -->
+  <div class="preview-wrap">
+    <div class="panel preview-panel">
+      <div class="panel-header" style="width:100%;">
+        <span class="panel-title">미리보기</span>
+      </div>
+
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <!-- 배경 이미지 -->
+          <img class="phone-bg" src="bg-mobile.png" alt="모바일 배경">
+
+          <!-- Banner Carousel (top: 186px — Figma 기준) -->
+          <div class="banner-carousel">
+            <div class="banner-slides" id="bannerSlides">
+              <!-- Slides rendered by JS -->
+            </div>
+            <div id="placeholderView" class="banner-placeholder">
+              <div class="icon">🖼️</div>
+              <span>배너를 등록하면 여기에 표시됩니다</span>
+            </div>
+            <!-- 고정 인디케이터 -->
+            <div class="banner-indicator" id="fixedIndicator" style="display:none;">
+              <div class="indicator-pill">
+                <div class="indicator-play" onclick="togglePlay()">
+                  <div class="indicator-play-icon" id="fixedPlayIcon">
+                    <div class="pause-bar"></div><div class="pause-bar"></div>
+                  </div>
+                </div>
+                <div class="indicator-num" id="fixedIndicatorNum">
+                  1<span class="slash">/</span><span class="total" id="fixedTotal">1</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let banners = JSON.parse(localStorage.getItem('naver_banners') || '[]');
+let currentSlide = 0;
+let carouselPos = 0;
+let autoPlayTimer = null;
+let isPlaying = true;
+let dragSrcIndex = null;
+let currentType = 'text';
+
+// ─── Init ───
+renderAll();
+startAutoPlay();
+initDrag();
+
+// ─── Storage ───
+function save() {
+  localStorage.setItem('naver_banners', JSON.stringify(banners));
+}
+
+// ─── Form ───
+function setType(type) {
+  currentType = type;
+  document.getElementById('typeBtn_text').classList.toggle('active', type === 'text');
+  document.getElementById('typeBtn_logo').classList.toggle('active', type === 'logo');
+  document.getElementById('typeBtn_product').classList.toggle('active', type === 'product');
+  document.getElementById('typeBtn_product_logo').classList.toggle('active', type === 'product-logo');
+  document.getElementById('section-title').style.display = (type === 'text' || type === 'product') ? '' : 'none';
+  document.getElementById('titleLine2Wrap').style.display = type === 'text' ? '' : 'none';
+  document.getElementById('section-logo').style.display = (type === 'logo' || type === 'product-logo') ? '' : 'none';
+  document.getElementById('logoSizeText').textContent = type === 'product-logo'
+    ? '로고 등록 사이즈 : W 690 x H 제한없음 (최대 86px까지 허용)'
+    : '로고 등록 사이즈 : W 690 x H 제한없음 (최대330px까지 허용)';
+}
+
+function handleFileChange(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    document.getElementById('imgPreview').src = ev.target.result;
+    document.getElementById('imgPreview').style.display = 'block';
+    livePreview();
+  };
+  reader.readAsDataURL(file);
+}
+
+
+function handleLogoFileChange(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    document.getElementById('logoPreview').src = ev.target.result;
+    document.getElementById('logoPreview').style.display = 'inline-block';
+    livePreview();
+  };
+  reader.readAsDataURL(file);
+}
+
+function updateCharCount(el, countId) {
+  document.getElementById(countId).textContent = el.value.length;
+}
+
+function getFormImage() {
+  const previewSrc = document.getElementById('imgPreview').src;
+  if (previewSrc && !previewSrc.endsWith(location.href)) return previewSrc;
+  return '';
+}
+
+function getLogoImage() {
+  const src = document.getElementById('logoPreview').src;
+  if (src && !src.endsWith(location.href)) return src;
+  return '';
+}
+
+function saveBanner() {
+  const imgSrc = getFormImage();
+  const subText = document.getElementById('subTextInput').value.trim();
+  const editIndex = parseInt(document.getElementById('editIndex').value);
+  let banner;
+
+  if (currentType === 'text') {
+    const line1 = document.getElementById('titleLine1').value.trim();
+    const line2 = document.getElementById('titleLine2').value.trim();
+    const title = line2 ? `${line1}\n${line2}` : line1;
+    if (!title) { showToast('⚠️ 타이틀을 입력해주세요.'); return; }
+    banner = { type: 'text', title, subText, imgSrc, id: Date.now() };
+  } else if (currentType === 'logo' || currentType === 'product-logo') {
+    const logoSrc = getLogoImage();
+    if (!logoSrc) { showToast('⚠️ 로고 이미지를 등록해주세요.'); return; }
+    banner = { type: currentType, logoSrc, subText, imgSrc, id: Date.now() };
+  } else {
+    const title = document.getElementById('titleLine1').value.trim();
+    if (!title) { showToast('⚠️ 타이틀을 입력해주세요.'); return; }
+    banner = { type: 'product', title, subText, imgSrc, id: Date.now() };
+  }
+
+  if (editIndex >= 0) {
+    banner.id = banners[editIndex].id;
+    banners[editIndex] = banner;
+    showToast('✅ 배너가 수정되었습니다.');
+  } else {
+    banners.push(banner);
+    showToast('✅ 배너가 등록되었습니다.');
+    currentSlide = banners.length - 1;
+  }
+
+  save();
+  renderAll();
+  resetForm();
+}
+
+function resetForm() {
+  setType('text');
+  document.getElementById('titleLine1').value = '';
+  document.getElementById('titleLine2').value = '';
+  document.getElementById('subTextInput').value = '';
+  document.getElementById('imgPreview').src = '';
+  document.getElementById('imgPreview').style.display = 'none';
+  document.getElementById('fileInput').value = '';
+  document.getElementById('logoPreview').src = '';
+  document.getElementById('logoPreview').style.display = 'none';
+  document.getElementById('logoFileInput').value = '';
+  document.getElementById('editIndex').value = '-1';
+  document.getElementById('titleCount1').textContent = '0';
+  document.getElementById('titleCount2').textContent = '0';
+  document.getElementById('subCount').textContent = '0';
+  document.getElementById('form-title').textContent = '배너 등록';
+  document.getElementById('save-btn-text').textContent = '배너 저장';
+}
+
+function editBanner(index) {
+  const b = banners[index];
+  setType(b.type || 'text');
+  if (b.type === 'logo' || b.type === 'product-logo') {
+    if (b.logoSrc) {
+      document.getElementById('logoPreview').src = b.logoSrc;
+      document.getElementById('logoPreview').style.display = 'inline-block';
+    }
+  } else if (b.type === 'product') {
+    document.getElementById('titleLine1').value = b.title || '';
+    document.getElementById('titleCount1').textContent = (b.title || '').length;
+  } else {
+    const [l1, l2] = (b.title || '').split('\n');
+    document.getElementById('titleLine1').value = l1 || '';
+    document.getElementById('titleLine2').value = l2 || '';
+    document.getElementById('titleCount1').textContent = (l1 || '').length;
+    document.getElementById('titleCount2').textContent = (l2 || '').length;
+  }
+  document.getElementById('subTextInput').value = b.subText || '';
+  document.getElementById('editIndex').value = index;
+  document.getElementById('subCount').textContent = (b.subText || '').length;
+  document.getElementById('form-title').textContent = '배너 수정';
+  document.getElementById('save-btn-text').textContent = '수정 저장';
+
+  if (b.imgSrc) {
+    document.getElementById('imgPreview').src = b.imgSrc;
+    document.getElementById('imgPreview').style.display = 'block';
+  }
+
+  currentSlide = index;
+  renderCarousel();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function deleteBanner(index) {
+  if (!confirm(`배너 "${banners[index].title}"을(를) 삭제할까요?`)) return;
+  banners.splice(index, 1);
+  if (currentSlide >= banners.length) currentSlide = Math.max(0, banners.length - 1);
+  save();
+  renderAll();
+  showToast('🗑 배너가 삭제되었습니다.');
+}
+
+// ─── Render ───
+function renderAll() {
+  renderList();
+  renderCarousel();
+  updatePreviewLabel();
+}
+
+function renderList() {
+  const list = document.getElementById('bannerList');
+  const empty = document.getElementById('emptyState');
+  document.getElementById('bannerCount').textContent = banners.length;
+
+  // Remove existing items
+  list.querySelectorAll('.banner-item').forEach(el => el.remove());
+
+  if (banners.length === 0) {
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  banners.forEach((b, i) => {
+    const item = document.createElement('div');
+    item.className = 'banner-item' + (i === currentSlide ? ' active' : '');
+    item.draggable = true;
+    item.dataset.index = i;
+
+    const thumbContent = b.imgSrc
+      ? `<img src="${b.imgSrc}" alt="">`
+      : `<span>🖼️</span>`;
+
+    item.innerHTML = `
+      <span class="drag-handle">⠿</span>
+      <div class="banner-order">${i + 1}</div>
+      <div class="banner-thumb">${thumbContent}</div>
+      <div class="banner-info">
+        <div class="banner-info-title">
+          <span style="font-size:10px;font-weight:700;padding:1px 5px;border-radius:4px;margin-right:4px;${b.type === 'logo' ? 'background:#fef3c7;color:#d97706;' : b.type === 'product' ? 'background:#fef9c3;color:#ca8a04;' : b.type === 'product-logo' ? 'background:#ede9fe;color:#7c3aed;' : 'background:var(--blue-light);color:var(--blue);'}">${b.type === 'logo' ? '로고형' : b.type === 'product' ? '상품조합형(텍스트)' : b.type === 'product-logo' ? '상품조합형(로고)' : '텍스트형'}</span>${(b.type === 'logo' || b.type === 'product-logo') ? '로고 배너' : escHtml((b.title || '').replace(/\n/g, ' '))}
+        </div>
+        <div class="banner-info-sub">${escHtml(b.subText || '서브텍스트 없음')}</div>
+      </div>
+      <div class="banner-actions">
+        <button class="icon-btn edit" title="수정" onclick="editBanner(${i})">수정</button>
+        <button class="icon-btn delete" title="삭제" onclick="deleteBanner(${i})">삭제</button>
+      </div>
+    `;
+
+    item.addEventListener('click', (e) => {
+      if (e.target.closest('.banner-actions')) return;
+      currentSlide = i;
+      renderAll();
+    });
+
+    // Drag events
+    item.addEventListener('dragstart', () => { dragSrcIndex = i; item.classList.add('dragging'); });
+    item.addEventListener('dragend', () => { item.classList.remove('dragging'); list.querySelectorAll('.banner-item').forEach(el => el.classList.remove('drag-over')); });
+    item.addEventListener('dragover', (e) => { e.preventDefault(); item.classList.add('drag-over'); });
+    item.addEventListener('dragleave', () => item.classList.remove('drag-over'));
+    item.addEventListener('drop', (e) => {
+      e.preventDefault();
+      if (dragSrcIndex === null || dragSrcIndex === i) return;
+      const moved = banners.splice(dragSrcIndex, 1)[0];
+      banners.splice(i, 0, moved);
+      currentSlide = i;
+      save();
+      renderAll();
+    });
+
+    list.appendChild(item);
+  });
+}
+
+function makeSlideHTML(b, displayIndex) {
+  let contentHTML;
+  const logoImgStyle = `width:230px;height:auto;display:block;transform:translateZ(0) scale(1);-webkit-backface-visibility:hidden;backface-visibility:hidden;will-change:transform;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;`;
+  if (b.type === 'logo') {
+    contentHTML = `<div style="position:absolute;left:16px;top:57px;display:flex;flex-direction:column;gap:4px;">
+         <img style="${logoImgStyle}" src="${b.logoSrc || ''}" alt="logo">
+         ${b.subText ? `<div class="banner-slide-sub">${escHtml(b.subText)}</div>` : ''}
+       </div>`;
+  } else if (b.type === 'product-logo') {
+    const thumb = () => `<div style="width:70px;height:70px;border-radius:4px;background:#fff;flex-shrink:0;"></div>`;
+    contentHTML = `<div style="position:absolute;left:16px;top:22px;display:flex;flex-direction:column;gap:4px;">
+         <img style="${logoImgStyle}max-height:26px;object-fit:contain;object-position:left;" src="${b.logoSrc || ''}" alt="logo">
+         ${b.subText ? `<div class="banner-slide-sub">${escHtml(b.subText)}</div>` : ''}
+       </div>
+       <div style="position:absolute;left:16px;top:88px;display:flex;gap:6px;">
+         ${thumb()}${thumb()}
+       </div>`;
+  } else if (b.type === 'product') {
+    const thumb = () => `<div style="width:70px;height:70px;border-radius:4px;background:#fff;flex-shrink:0;"></div>`;
+    contentHTML = `<div style="position:absolute;left:16px;top:21px;">
+        <div class="banner-slide-title" style="font-size:22px;">${escHtml(b.title || '')}</div>
+        ${b.subText ? `<div class="banner-slide-sub" style="margin-top:6px;">${escHtml(b.subText)}</div>` : ''}
+        <div style="display:flex;gap:6px;margin-top:12px;">
+          ${thumb()}${thumb()}
+        </div>
+      </div>`;
+  } else {
+    contentHTML = `<div class="banner-slide-content">
+        <div class="banner-slide-title">${escHtml(b.title || '')}</div>
+        ${b.subText ? `<div class="banner-slide-sub">${escHtml(b.subText)}</div>` : ''}
+       </div>`;
+  }
+
+  return `
+    <div class="banner-slide">
+      <div class="banner-slide-bg" style="background-image:url('${b.imgSrc || ''}')"></div>
+      <div class="banner-slide-gradient"></div>
+      ${contentHTML}
+    </div>`;
+}
+
+function renderCarousel() {
+  const slidesEl = document.getElementById('bannerSlides');
+  const placeholder = document.getElementById('placeholderView');
+
+  if (banners.length === 0) {
+    slidesEl.innerHTML = '';
+    placeholder.style.display = '';
+    return;
+  }
+  placeholder.style.display = 'none';
+
+  // 슬라이드 + 마지막에 첫 슬라이드 클론 추가 (무한 루프용)
+  const slides = banners.map((b, i) => makeSlideHTML(b, i)).join('');
+  const clone = makeSlideHTML(banners[0], 0);
+  slidesEl.innerHTML = slides + clone;
+
+  carouselPos = currentSlide;
+  slidesEl.style.transition = 'none';
+  slidesEl.style.transform = `translateX(-${carouselPos * 375}px)`;
+  setTimeout(() => { slidesEl.style.transition = 'transform 0.4s cubic-bezier(0.4,0,0.2,1)'; }, 50);
+}
+
+function updatePreviewLabel() {
+  updateFixedIndicator();
+}
+
+function updateFixedIndicator() {
+  const el = document.getElementById('fixedIndicator');
+  if (banners.length === 0) { el.style.display = 'none'; return; }
+  el.style.display = '';
+  document.getElementById('fixedIndicatorNum').childNodes[0].textContent = currentSlide + 1;
+  document.getElementById('fixedTotal').textContent = banners.length;
+  const icon = document.getElementById('fixedPlayIcon');
+  icon.innerHTML = isPlaying
+    ? `<div class="pause-bar"></div><div class="pause-bar"></div>`
+    : `<svg width="8" height="10" viewBox="0 0 8 10" fill="white"><path d="M0 0L8 5L0 10V0Z"/></svg>`;
+}
+
+// ─── Carousel Controls ───
+function advanceSlide() {
+  if (banners.length <= 1) return;
+  const slidesEl = document.getElementById('bannerSlides');
+  carouselPos++;
+
+  slidesEl.style.transition = 'transform 0.4s cubic-bezier(0.4,0,0.2,1)';
+  slidesEl.style.transform = `translateX(-${carouselPos * 375}px)`;
+
+  // 클론(마지막)에 도달하면 transition 끝난 후 즉시 0으로 스냅
+  if (carouselPos === banners.length) {
+    slidesEl.addEventListener('transitionend', function handler() {
+      slidesEl.removeEventListener('transitionend', handler);
+      carouselPos = 0;
+      slidesEl.style.transition = 'none';
+      slidesEl.style.transform = 'translateX(0)';
+    }, { once: true });
+  }
+
+  currentSlide = carouselPos % banners.length;
+  updatePreviewLabel();
+  document.querySelectorAll('.banner-item').forEach((el, i) => {
+    el.classList.toggle('active', i === currentSlide);
+  });
+}
+
+function goToSlide(index) {
+  if (banners.length === 0) return;
+  currentSlide = (index + banners.length) % banners.length;
+  carouselPos = currentSlide;
+  const slidesEl = document.getElementById('bannerSlides');
+  slidesEl.style.transition = 'transform 0.4s cubic-bezier(0.4,0,0.2,1)';
+  slidesEl.style.transform = `translateX(-${carouselPos * 375}px)`;
+  updatePreviewLabel();
+  document.querySelectorAll('.banner-item').forEach((el, i) => {
+    el.classList.toggle('active', i === currentSlide);
+  });
+}
+
+function prevBanner() { goToSlide(currentSlide - 1); }
+function nextBanner() { goToSlide(currentSlide + 1); }
+
+function startAutoPlay() {
+  clearInterval(autoPlayTimer);
+  if (isPlaying) {
+    autoPlayTimer = setInterval(() => {
+      advanceSlide();
+    }, 3000);
+  }
+}
+
+function togglePlay() {
+  isPlaying = !isPlaying;
+  startAutoPlay();
+  updateFixedIndicator();
+}
+
+// ─── Drag to Swipe ───
+function initDrag() {
+  const carousel = document.querySelector('.banner-carousel');
+  let startX = 0, isDragging = false, dragDelta = 0;
+
+  function onStart(x) {
+    if (banners.length <= 1) return;
+    isDragging = true;
+    startX = x;
+    dragDelta = 0;
+    clearInterval(autoPlayTimer);
+    const slidesEl = document.getElementById('bannerSlides');
+    slidesEl.style.transition = 'none';
+    carousel.style.cursor = 'grabbing';
+  }
+
+  function onMove(x) {
+    if (!isDragging) return;
+    dragDelta = x - startX;
+    const slidesEl = document.getElementById('bannerSlides');
+    slidesEl.style.transform = `translateX(${-(carouselPos * 375) + dragDelta}px)`;
+  }
+
+  function onEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    carousel.style.cursor = 'grab';
+    const slidesEl = document.getElementById('bannerSlides');
+    slidesEl.style.transition = 'transform 0.4s cubic-bezier(0.4,0,0.2,1)';
+
+    if (dragDelta < -50) {
+      advanceSlide();
+    } else if (dragDelta > 50) {
+      goToSlide(currentSlide - 1);
+    } else {
+      slidesEl.style.transform = `translateX(-${carouselPos * 375}px)`;
+    }
+
+    if (isPlaying) startAutoPlay();
+  }
+
+  // Mouse
+  carousel.addEventListener('mousedown', (e) => { e.preventDefault(); onStart(e.clientX); });
+  window.addEventListener('mousemove', (e) => onMove(e.clientX));
+  window.addEventListener('mouseup', () => onEnd());
+
+  // Touch
+  carousel.addEventListener('touchstart', (e) => onStart(e.touches[0].clientX), { passive: true });
+  carousel.addEventListener('touchmove', (e) => onMove(e.touches[0].clientX), { passive: true });
+  carousel.addEventListener('touchend', () => onEnd());
+
+  carousel.style.cursor = 'grab';
+}
+
+// ─── Live Preview ───
+function livePreview() {
+  // Updates preview while typing (no-op for now — form changes are reflected on save)
+}
+
+
+// ─── Utilities ───
+function escHtml(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
