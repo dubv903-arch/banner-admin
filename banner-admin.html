@@ -1,0 +1,2426 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>홈 최상단 배너 프리뷰</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Pretendard Variable', Pretendard, -apple-system, sans-serif;
+  background: #f0f2f5;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+.global-header {
+  background: #4C2BD2;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  flex-shrink: 0;
+  letter-spacing: -0.3px;
+}
+.global-header-inner {
+  padding: 18px 34px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.global-header-inner .header-logo { width: 106px; height: auto; flex-shrink: 0; }
+.global-header-inner .header-divider { width: 1px; height: 17px; background: rgba(255,255,255,0.25); flex-shrink: 0; }
+.guide-download {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.15s;
+  font-family: inherit;
+  cursor: pointer;
+}
+.guide-download:hover { background: rgba(255,255,255,0.25); }
+.guide-download svg { flex-shrink: 0; }
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  width: 100%;
+  background: #fff;
+}
+
+/* ====== Left Panel ====== */
+.left-panel {
+  width: 450px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-right: 1px solid #e5e8ec;
+  overflow: hidden;
+}
+.left-scroll { flex: 1; overflow-y: auto; }
+.left-footer { flex-shrink: 0; background: #fff; border-top: 1px solid #d3dadf; padding: 24px 37.5px; }
+.left-footer .btn-row { margin-top: 10px; }
+.panel-header {
+  display: none;
+  background: #4D47DD;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 18px 34px;
+  flex-shrink: 0;
+  letter-spacing: -0.3px;
+}
+.form-section {
+  padding: 24px 37.5px;
+  border-bottom: 8px solid #f0f2f5;
+}
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #121212;
+  letter-spacing: -0.5px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e8ecef;
+  margin-bottom: 14px;
+}
+#formTitle { margin-bottom: 32px; }
+.form-group-block { padding: 18px 0; }
+.form-group-block:first-of-type { padding-top: 0; }
+.form-group-label {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #121212;
+  letter-spacing: -0.5px;
+  margin-bottom: 12px;
+}
+.group-num {
+  color: #121212;
+  font-size: 17px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.group-num::after { content: '.'; }
+.field-group { margin-bottom: 16px; position: relative; }
+.form-group-block .field-group:last-child { margin-bottom: 0; }
+.subsection-label { font-size: 14px; font-weight: 700; color: #222; margin-bottom: 12px; }
+#subLogoUploadArea .upload-empty { padding: 19px 20px; }
+#titleSubsection .field-group { margin-bottom: 13px; }
+#titleSubsection #title2Group { margin-bottom: 0; }
+.subsection + .subsection { margin-top: 20px; padding-top: 20px; border-top: 1px dashed #e3e6ec; }
+/* 텍스트 입력 영역을 감싸는 카드 */
+.text-card { background: #f8f9fd; border: 1px solid #d3dadf; border-radius: 10px; padding: 16px 16px 18px; }
+.text-card .subsection + .subsection { margin-top: 16px; padding-top: 0; border-top: none; }
+.text-card .field-group { margin-bottom: 8px; }
+.text-card .subsection-label { margin-bottom: 10px; }
+#contentGroup.logo-only #subSubsection { margin-top: 0; padding-top: 0; border-top: none; }
+.char-counter {
+  position: absolute;
+  right: 14px;
+  bottom: 16px;
+  font-size: 12px;
+  color: #b5b5b5;
+  pointer-events: none;
+  background: #fff;
+  padding-left: 4px;
+}
+.field-note { display: none; }
+.field-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
+}
+.field-input {
+  width: 100%;
+  height: 48px;
+  border: 1px solid #e0e4ea;
+  border-radius: 6px;
+  padding: 0 64px 0 16px;
+  font-family: inherit;
+  font-size: 15px;
+  color: #222;
+  outline: none;
+  background: #fff;
+  transition: border-color 0.15s;
+}
+.field-input:focus { border-color: #4D47DD; }
+.field-input::placeholder { color: #b5b5b5; font-size: 13px; }
+
+.upload-area {
+  border: 1px solid #d3dadf;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+  background-color: #fff;
+  background-image:
+    linear-gradient(45deg, #f0f1f4 25%, transparent 25%),
+    linear-gradient(-45deg, #f0f1f4 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #f0f1f4 75%),
+    linear-gradient(-45deg, transparent 75%, #f0f1f4 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, 8px 0px;
+}
+.upload-area.drag-over { border-color: #4b47d5; }
+.upload-area:hover { border-color: #4b47d5; }
+#uploadArea { width: 375px; height: 180px; }
+#uploadArea .thumb { width: 375px; height: 180px; object-fit: cover; }
+.upload-area input[type=file] { display: none; }
+.upload-area .thumb {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+.upload-empty {
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 100%;
+}
+.upload-icon {
+  width: 28px; height: 28px;
+  background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2028%2028%27%3E%3Cpath%20d%3D%27M14%200C21.7%200%2028%206.3%2028%2014C28%2021.7%2021.7%2028%2014%2028C6.3%2028%200%2021.7%200%2014C0%206.3%206.3%200%2014%200ZM19.6%2021V18.2H8.4V21H19.6ZM19.6%2011.2L14%205.6L8.4%2011.2H11.9V16.8H16.1V11.2H19.6Z%27%20fill%3D%27%234C2BD2%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;
+  flex-shrink: 0;
+  margin-bottom: 4px;
+}
+.upload-icon-glyph { display: none; }
+.upload-hint { font-size: 12px; color: #949494; font-weight: 500; line-height: 1.5; letter-spacing: -0.5px; }
+.upload-sub { font-size: 12px; color: #bbb; margin-top: -4px; }
+.upload-sub-out { font-size: 12px; color: #b5b5b5; margin-top: 8px; text-align: right; }
+.upload-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+  z-index: 2;
+}
+.upload-actions button {
+  font-size: 12px;
+  padding: 5px 10px;
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1;
+}
+.upload-actions button:hover { background: rgba(0,0,0,0.85); }
+
+.form-group-desc { font-size: 13px; color: #949494; margin-top: -4px; margin-bottom: 14px; letter-spacing: -0.5px; }
+.form-group-desc.desc-warn { display: flex; align-items: center; gap: 5px; }
+.ic-info { width: 16px; height: 16px; flex-shrink: 0; background-color: #4b47d5; -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2018%2018%27%3E%3Cpath%20fill-rule%3D%27evenodd%27%20clip-rule%3D%27evenodd%27%20d%3D%27M17.3346%208.99935C17.3346%204.39685%2013.6038%200.666016%209.0013%200.666016C4.3988%200.666016%200.667969%204.39685%200.667969%208.99935C0.667969%2013.6018%204.3988%2017.3327%209.0013%2017.3327C13.6038%2017.3327%2017.3346%2013.6018%2017.3346%208.99935ZM9.0013%204.83268C9.22232%204.83268%209.43428%204.92048%209.59056%205.07676C9.74684%205.23304%209.83464%205.445%209.83464%205.66602V9.83268C9.83464%2010.0537%209.74684%2010.2657%209.59056%2010.4219C9.43428%2010.5782%209.22232%2010.666%209.0013%2010.666C8.78029%2010.666%208.56833%2010.5782%208.41205%2010.4219C8.25577%2010.2657%208.16797%2010.0537%208.16797%209.83268V5.66602C8.16797%205.445%208.25577%205.23304%208.41205%205.07676C8.56833%204.92048%208.78029%204.83268%209.0013%204.83268ZM8.16797%2012.3327C8.16797%2012.1117%208.25577%2011.8997%208.41205%2011.7434C8.56833%2011.5871%208.78029%2011.4993%209.0013%2011.4993H9.00797C9.22898%2011.4993%209.44094%2011.5871%209.59722%2011.7434C9.7535%2011.8997%209.8413%2012.1117%209.8413%2012.3327C9.8413%2012.5537%209.7535%2012.7657%209.59722%2012.9219C9.44094%2013.0782%209.22898%2013.166%209.00797%2013.166H9.0013C8.78029%2013.166%208.56833%2013.0782%208.41205%2012.9219C8.25577%2012.7657%208.16797%2012.5537%208.16797%2012.3327Z%27%20fill%3D%27%23000%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2018%2018%27%3E%3Cpath%20fill-rule%3D%27evenodd%27%20clip-rule%3D%27evenodd%27%20d%3D%27M17.3346%208.99935C17.3346%204.39685%2013.6038%200.666016%209.0013%200.666016C4.3988%200.666016%200.667969%204.39685%200.667969%208.99935C0.667969%2013.6018%204.3988%2017.3327%209.0013%2017.3327C13.6038%2017.3327%2017.3346%2013.6018%2017.3346%208.99935ZM9.0013%204.83268C9.22232%204.83268%209.43428%204.92048%209.59056%205.07676C9.74684%205.23304%209.83464%205.445%209.83464%205.66602V9.83268C9.83464%2010.0537%209.74684%2010.2657%209.59056%2010.4219C9.43428%2010.5782%209.22232%2010.666%209.0013%2010.666C8.78029%2010.666%208.56833%2010.5782%208.41205%2010.4219C8.25577%2010.2657%208.16797%2010.0537%208.16797%209.83268V5.66602C8.16797%205.445%208.25577%205.23304%208.41205%205.07676C8.56833%204.92048%208.78029%204.83268%209.0013%204.83268ZM8.16797%2012.3327C8.16797%2012.1117%208.25577%2011.8997%208.41205%2011.7434C8.56833%2011.5871%208.78029%2011.4993%209.0013%2011.4993H9.00797C9.22898%2011.4993%209.44094%2011.5871%209.59722%2011.7434C9.7535%2011.8997%209.8413%2012.1117%209.8413%2012.3327C9.8413%2012.5537%209.7535%2012.7657%209.59722%2012.9219C9.44094%2013.0782%209.22898%2013.166%209.00797%2013.166H9.0013C8.78029%2013.166%208.56833%2013.0782%208.41205%2012.9219C8.25577%2012.7657%208.16797%2012.5537%208.16797%2012.3327Z%27%20fill%3D%27%23000%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat; }
+.upload-title { font-size: 15px; font-weight: 700; color: #4b47d5; letter-spacing: -0.5px; }
+.bright-warn { margin-top: 8px; padding: 10px 12px; background: #FFF3F0; border: 1px solid #FFC9BC; color: #D8431F; font-size: 12px; line-height: 1.5; letter-spacing: -0.2px; border-radius: 6px; }
+.bright-warn strong { font-weight: 700; }
+.bright-warn-note { display: block; margin-top: 6px; padding-top: 6px; border-top: 1px solid #FFD9CE; color: #B23818; font-size: 11px; }
+/* 미리보기 슬라이드 밝기 사용불가 오버레이 */
+.bright-block { position: absolute; top: 14px; left: 14px; display: none; z-index: 8; pointer-events: none; }
+.bright-block .bb-tag { display: inline-flex; align-items: center; gap: 5px; background: #E5342B; color: #fff; font-weight: 800; font-size: 13px; letter-spacing: -0.3px; padding: 7px 10px; border-radius: 6px; white-space: nowrap; }
+.bright-block .bb-tag .bb-x { font-weight: 900; }
+.type-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.example-btn {
+  margin-left: auto;
+  padding: 5px 11px;
+  background: #f0effb;
+  border: none;
+  border-radius: 999px;
+  color: #4b47d5;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  transition: color 0.15s;
+}
+.example-btn::after {
+  content: '›';
+  font-size: 16px;
+  line-height: 1;
+  margin-top: -1px;
+}
+.example-btn:hover { background: #e4e3ff; color: #3a35b0; }
+.form-group-label { justify-content: flex-start; }
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+.modal-backdrop.show { display: flex; }
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  max-width: 1000px;
+  width: 100%;
+  height: 700px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.modal-header {
+  flex-shrink: 0;
+  height: 57px;
+  background: #4C2BD2;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  position: relative;
+}
+.modal-body {
+  flex: 1;
+  overflow: auto;
+  padding: 14px 24px 24px;
+}
+.modal-close {
+  position: absolute;
+  top: 50%; right: 24px;
+  transform: translateY(-50%);
+  width: 45px; height: 45px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #fff;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-close svg { display: block; width: 45px; height: 45px; }
+.modal-close:hover { color: rgba(255,255,255,0.75); }
+.modal-title {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 20px; font-weight: 700; color: #fff;
+  margin: 0;
+}
+.modal-tabs { display: flex; gap: 0; margin-bottom: 16px; border-bottom: 1px solid #e8ecf0; }
+.modal-tab {
+  padding: 10px 18px;
+  border: none;
+  background: none;
+  font-size: 15px; font-weight: 500;
+  color: #999;
+  cursor: pointer;
+  font-family: inherit;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.modal-tab:hover { color: #555; }
+.modal-tab.active { color: #222; font-weight: 700; border-bottom-color: #222; }
+.modal-img { width: 100%; height: auto; display: block; border-radius: 8px; }
+.type-tab {
+  flex: 1; height: 40px;
+  border: 1px solid #d3dadf;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px; font-weight: 600;
+  color: #949494;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: -0.5px;
+  transition: all 0.15s;
+}
+.type-tab.active { border-color: #4b47d5; color: #4b47d5; background: rgba(94,71,243,0.06); }
+.mo-slide-logo { max-width: 230px; height: auto; display: block; }
+.pc-slide-logo { max-width: 330px; height: auto; display: block; }
+.mo-slide-sublogo { position: absolute; top: 12px; right: 12px; width: 120px; height: auto; z-index: 6; pointer-events: none; }
+.pad-slide-sublogo { position: absolute; top: 12px; right: 12px; width: 120px; height: auto; z-index: 6; pointer-events: none; }
+.pc-slide-sublogo { position: absolute; top: 16px; right: 16px; width: 170px; height: auto; z-index: 6; pointer-events: none; }
+.mo-slide.logo-type .mo-slide-contents {
+  top: 0; bottom: 0;
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  gap: 3px;
+}
+.pc-slide.logo-type .pc-slide-contents {
+  top: 0; bottom: 0;
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  gap: 5px;
+}
+.mo-slide.product-text-type .mo-slide-contents {
+  top: 0; bottom: 0;
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  gap: 0;
+}
+.pc-slide.product-text-type .pc-slide-contents {
+  top: 0; bottom: 0;
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  gap: 0;
+}
+.mo-slide.product-text-type .mo-slide-sub { margin-top: 5px; }
+.pc-slide.product-text-type .pc-slide-sub { margin-top: 6px; }
+.mo-slide.product-text-type .mo-item-cards { margin-top: 10px; }
+.pc-slide.product-text-type .pc-item-cards { margin-top: 12px; }
+.mo-slide.product-logo-type .mo-slide-contents {
+  top: 0; bottom: 0;
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  gap: 0;
+}
+.pc-slide.product-logo-type .pc-slide-contents {
+  top: 0; bottom: 0;
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  gap: 0;
+}
+.mo-slide.product-logo-type .mo-item-cards { margin-top: 10px; }
+.pc-slide.product-logo-type .pc-item-cards { margin-top: 12px; }
+.mo-item-cards { display: flex; gap: 6px; }
+.mo-item-card { width: 70px; height: 70px; border-radius: 4px; background: #fff center/cover no-repeat; flex-shrink: 0; }
+.mo-item-card:nth-child(1) { background-image: url('product-thumb-1.png'); }
+.mo-item-card:nth-child(2) { background-image: url('product-thumb-2.png'); }
+.pc-item-cards { display: flex; gap: 9px; }
+.pc-item-card { width: 86px; height: 86px; border-radius: 6px; background: #fff center/cover no-repeat; flex-shrink: 0; }
+.pc-item-card:nth-child(1) { background-image: url('product-thumb-1.png'); }
+.pc-item-card:nth-child(2) { background-image: url('product-thumb-2.png'); }
+
+.btn-primary {
+  width: 100%;
+  height: 50px;
+  background: #121212;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  margin-top: 0;
+  letter-spacing: -0.5px;
+  transition: background 0.15s;
+}
+.btn-primary:hover { background: #000; }
+.btn-row {
+  display: flex;
+  gap: 9px;
+  margin-top: 10px;
+}
+.left-footer .btn-row > button { flex: 1; width: auto; height: 46px; border-radius: 6px; font-size: 16px; font-weight: 700; letter-spacing: -0.5px; padding: 0; margin-top: 0; }
+.left-footer .btn-cancel { display: flex; align-items: center; justify-content: center; background: #fff; border: 1px solid #d3dadf; color: #949494; }
+.left-footer .btn-reset { background: #f1f4f6; border: 1px solid #d3dadf; color: #949494; }
+.left-footer .btn-cancel:hover, .left-footer .btn-reset:hover { border-color: #c2cbd2; color: #7d7d7d; }
+.btn-reset {
+  height: 44px;
+  padding: 0 18px;
+  background: none;
+  color: #666;
+  border: 1px solid #dde2e8;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s;
+}
+.btn-reset:hover { border-color: #aaa; color: #333; }
+.btn-cancel {
+  width: 100%;
+  height: 36px;
+  background: none;
+  color: #999;
+  border: 1px solid #dde2e8;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+.list-section { padding: 30px 37.5px 20px; flex: 1; }
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.list-subhead { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; margin-bottom: 14px; }
+.list-help { font-size: 12px; color: #949494; letter-spacing: -0.5px; }
+.list-count { font-size: 12px; color: #949494; font-weight: 500; }
+
+.banner-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 10px;
+  background: #f8f9fb;
+  border: 1px solid #e8ecf0;
+  border-radius: 8px;
+  margin-bottom: 7px;
+  transition: border-color 0.15s;
+}
+.banner-item.drag-over { border-color: #4D47DD; background: #f5f4ff; }
+.banner-item.dragging { opacity: 0.45; }
+.drag-handle { color: #ccc; font-size: 15px; cursor: grab; flex-shrink: 0; }
+.banner-num { font-size: 12px; font-weight: 700; color: #4D47DD; min-width: 16px; text-align: center; flex-shrink: 0; }
+.banner-thumb {
+  width: 54px; height: 26px;
+  border-radius: 3px; object-fit: cover;
+  background: #dde2e8; flex-shrink: 0;
+  display: block;
+}
+.banner-thumb-empty { width: 54px; height: 26px; border-radius: 3px; background: #dde2e8; flex-shrink: 0; }
+.banner-info { flex: 1; min-width: 0; }
+.banner-info .b-title {
+  font-size: 13px; font-weight: 600; color: #222;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.banner-info .b-sub {
+  font-size: 11px; color: #aaa; margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.btn-edit, .btn-del {
+  height: 28px; padding: 0 10px; border-radius: 5px;
+  border: none; cursor: pointer; font-size: 12px; font-family: inherit; font-weight: 500;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  white-space: nowrap;
+}
+.btn-edit { background: #eeeefb; color: #4D47DD; }
+.btn-del  { background: #ffeeed; color: #e53e3e; }
+.empty-list { font-size: 13px; color: #bbb; text-align: center; padding: 24px 0; }
+
+/* ====== Right Panel ====== */
+.right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #f8f9fd;
+}
+.preview-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 28px 25px;
+  flex-shrink: 0;
+  background: transparent;
+}
+.preview-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid #d3dadf;
+  border-radius: 999px;
+  box-sizing: border-box;
+}
+.preview-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 38px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: #000;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: -0.5px;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s, color 0.15s;
+}
+.preview-tab.active { background: #4c2bd2; color: #fff; }
+
+/* ====== Object guide bar ====== */
+.guide-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.guide-switch { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+.guide-switch input { display: none; }
+.guide-switch-track { width: 46px; height: 24px; border-radius: 100px; background: #ccc; position: relative; transition: background 0.15s; flex-shrink: 0; }
+.guide-switch-knob { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: left 0.15s; }
+.guide-switch input:checked + .guide-switch-track { background: #4c2bd2; }
+.guide-switch input:checked + .guide-switch-track .guide-switch-knob { left: 25px; }
+.guide-switch-label { font-size: 16px; font-weight: 700; line-height: 24px; letter-spacing: -0.5px; color: #4c2bd2; }
+.guide-type-seg { display: flex; gap: 4px; }
+.guide-type-seg button { display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 30px; box-sizing: border-box; border: 1px solid #d3dadf; background: #fff; border-radius: 6px; font-size: 13px; font-weight: 700; line-height: 16px; letter-spacing: -0.5px; color: #949494; cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s; }
+.guide-type-seg button.active { background: rgba(94,71,243,0.12); border-color: #4c2bd2; color: #4c2bd2; }
+.guide-bar:not(.on) .guide-type-seg { opacity: 0.4; pointer-events: none; }
+
+/* object safe-area overlay drawn on each slide */
+.obj-guide {
+  position: absolute;
+  display: none;
+  box-sizing: border-box;
+  border: 1.5px dashed rgba(76,43,210,0.9);
+  background: rgba(76,43,210,0.2);
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 6;
+  align-items: center;
+  justify-content: center;
+}
+body.guides-on .obj-guide { display: flex; }
+.obj-guide-label {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 13px; font-weight: 700; color: #fff;
+  background: #4C2BD2;
+  padding: 7px 10px; border-radius: 99px;
+  letter-spacing: -0.3px; white-space: nowrap;
+}
+.obj-guide.danger { border-color: #ff3b30; background: rgba(255,59,48,0.16); }
+.obj-guide.danger .obj-guide-label { background: #ff3b30; }
+.obj-guide.danger .obj-guide-label::after { content: ' · 텍스트가 길어요'; font-weight: 600; }
+
+.preview-content {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0 30px 30px;
+}
+.preview-pane { display: none; }
+.preview-pane.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+#pane-pc.active { align-items: flex-start; }
+#pane-mo.active { flex-direction: column; align-items: center; justify-content: center; min-height: 100%; }
+#pane-pad.active { flex-direction: column; align-items: center; justify-content: flex-start; }
+
+/* ====== MO Preview ====== */
+.mo-frame {
+  width: 375px;
+  height: 812px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  border-radius: 20px;
+  border: 1px solid #DBDBDB;
+}
+.mo-bg {
+  position: absolute;
+  inset: 0;
+  width: 375px;
+  height: 812px;
+  object-fit: cover;
+  pointer-events: none;
+}
+.mo-banner-area {
+  position: absolute;
+  top: 150px;
+  left: 0;
+  width: 375px;
+  height: 180px;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+}
+.mo-banner-area.is-dragging { cursor: grabbing; }
+.mo-slide-empty-placeholder { width: 375px; height: 180px; background: #E3E3E3; flex-shrink: 0; }
+.mo-banner-track {
+  display: flex;
+  height: 180px;
+  will-change: transform;
+  transition: transform 0.4s ease;
+}
+.mo-slide {
+  width: 375px;
+  height: 180px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+.mo-slide-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mo-slide-bg-empty { position: absolute; inset: 0; background: #9aa0a6; }
+.mo-slide-gradient { display: none; }
+.mo-slide-contents { position: absolute; left: 16px; top: 46px; }
+.mo-slide-title {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 24px; font-weight: 600;
+  line-height: 32px; letter-spacing: -0.5px;
+  color: #fff; white-space: pre-line;
+}
+.mo-slide-sub {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 14px; font-weight: 300;
+  line-height: 17px; letter-spacing: -0.5px;
+  color: #fff; margin-top: 7px;
+}
+.mo-indicator {
+  position: absolute; bottom: 16px; right: 16px;
+  height: 21px; display: flex; gap: 1px;
+  border-radius: 999px; overflow: hidden;
+  z-index: 10; width: auto;
+}
+.mo-ind-play {
+  width: 22px; height: 21px;
+  background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+}
+.mo-ind-num {
+  height: 21px;
+  background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+  gap: 1px;
+  padding: 0 7px;
+}
+.mo-ind-cur { font-size: 12px; font-weight: 700; color: #fff; line-height: 14px; font-variant-numeric: tabular-nums; }
+.mo-ind-sep { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.6); line-height: 13px; padding: 0 1px; }
+.mo-ind-tot { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.7); line-height: 14px; font-variant-numeric: tabular-nums; }
+
+/* ====== PC Preview ====== */
+.pc-outer { width: 100%; display: flex; justify-content: center; overflow-x: auto; }
+.pc-scale-wrapper { transform-origin: top center; flex-shrink: 0; }
+.pc-frame {
+  width: 1152px;
+  height: 1300px;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 20px;
+  border: 1px solid #DBDBDB;
+}
+.pc-bg {
+  position: absolute;
+  inset: 0;
+  width: 1152px;
+  height: 1300px;
+  object-fit: cover;
+  object-position: top center;
+  pointer-events: none;
+}
+.pc-white-overlay {
+  position: absolute;
+  left: 0; top: 179px;
+  width: 100%; height: 295px;
+  background: #fff;
+}
+.pc-banner-viewport {
+  position: absolute;
+  top: 180px; left: 0;
+  width: 1152px; height: 260px;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+}
+.pc-banner-viewport.is-dragging { cursor: grabbing; }
+.pc-slide-empty-placeholder { width: 540px; height: 260px; background: #E3E3E3; flex-shrink: 0; border-radius: 12px; }
+.mo-slide-bg, .pc-slide-bg { pointer-events: none; }
+.pc-banner-track {
+  display: flex;
+  gap: 12px;
+  height: 260px;
+  position: absolute;
+  left: -246px;
+  will-change: transform;
+  transition: transform 0.4s ease;
+}
+.pc-slide {
+  width: 540px; height: 260px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+.pc-slide-bg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+}
+.pc-slide-bg-empty { position: absolute; inset: 0; background: #9aa0a6; }
+.pc-slide-gradient { display: none; }
+.pc-slide-contents { position: absolute; left: 26px; top: 74px; }
+.pc-slide-title {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 32px; font-weight: 600;
+  line-height: 40px; letter-spacing: -0.5px;
+  color: #fff; white-space: pre-line;
+}
+.pc-slide-sub {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 18px; font-weight: 300;
+  line-height: 24px; letter-spacing: -0.5px;
+  color: #fff; margin-top: 8px;
+}
+.pc-indicator {
+  position: absolute;
+  left: 96px; top: 440px;
+  width: 960px; height: 60px;
+  background: #fff;
+}
+.pc-bar-wrap {
+  position: absolute;
+  left: 0; top: 29px;
+  width: 846px; height: 2px;
+  background: #e8ecef;
+  border-radius: 1px;
+}
+.pc-bar-active {
+  position: absolute; left: 0; top: 0;
+  height: 2px; background: #000;
+  border-radius: 1px;
+  transition: left 0.35s ease, width 0.35s ease;
+}
+.pc-bt {
+  position: absolute;
+  left: 876px; top: 20px;
+  width: 84px; height: 20px;
+}
+.pc-bt-prev, .pc-bt-next, .pc-bt-stop {
+  position: absolute;
+  background: none; border: none;
+  cursor: pointer; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.pc-bt-prev { left: 0; top: 2px; width: 16px; height: 16px; }
+.pc-bt-sep  { position: absolute; left: 26.5px; top: 5px; width: 1.5px; height: 10px; background: #d3dadf; }
+.pc-bt-next { left: 38px; top: 2px; width: 16px; height: 16px; }
+.pc-bt-stop { left: 64px; top: 0; width: 20px; height: 20px; }
+
+/* ====== PAD Preview ====== */
+.pad-outer { flex-shrink: 0; display: flex; justify-content: center; overflow: hidden; width: 100%; }
+.pad-scale-wrapper { transform-origin: top center; flex-shrink: 0; }
+.pad-frame { width: 768px; height: 1080px; position: relative; overflow: hidden; border-radius: 20px; border: 1px solid #DBDBDB; }
+.pad-bg { position: absolute; top: 0; left: 0; width: 768px; height: 1080px; object-fit: cover; }
+.pad-banner-viewport {
+  position: absolute; left: 0; top: 150px;
+  width: 768px; height: 230px;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+}
+.pad-banner-viewport.is-dragging { cursor: grabbing; }
+.pad-slide-empty-placeholder { width: 480px; height: 230px; background: #E3E3E3; flex-shrink: 0; border-radius: 12px; }
+.pad-banner-track {
+  display: flex; gap: 6px; height: 230px;
+  transition: transform 0.4s ease;
+  will-change: transform;
+}
+.pad-slide {
+  width: 480px; height: 230px;
+  position: relative; flex-shrink: 0; overflow: hidden;
+}
+.pad-slide-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.pad-slide-bg-empty { position: absolute; inset: 0; background: #9aa0a6; }
+.pad-slide-contents { position: absolute; left: 16px; top: 71px; }
+.pad-slide-title {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 24px; font-weight: 600;
+  line-height: 32px; letter-spacing: -0.5px;
+  color: #fff; white-space: pre-line;
+}
+.pad-slide-sub {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 14px; font-weight: 300;
+  line-height: 17px; letter-spacing: -0.5px;
+  color: #fff; margin-top: 7px;
+}
+.pad-slide-logo { max-width: 230px; height: auto; display: block; }
+.pad-slide.logo-type .pad-slide-contents {
+  top: 0; bottom: 0;
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 3px;
+}
+.pad-slide.product-text-type .pad-slide-contents {
+  top: 0; bottom: 0;
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 0;
+}
+.pad-slide.product-text-type .pad-slide-sub { margin-top: 5px; }
+.pad-slide.product-text-type .pad-item-cards { margin-top: 10px; }
+.pad-slide.product-logo-type .pad-slide-contents {
+  top: 0; bottom: 0;
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 0;
+}
+.pad-slide.product-logo-type .pad-item-cards { margin-top: 10px; }
+.pad-item-cards { display: flex; gap: 6px; }
+.pad-item-card { width: 70px; height: 70px; border-radius: 4px; background: #fff center/cover no-repeat; flex-shrink: 0; }
+.pad-item-card:nth-child(1) { background-image: url('product-thumb-1.png'); }
+.pad-item-card:nth-child(2) { background-image: url('product-thumb-2.png'); }
+.pad-indicator {
+  position: absolute; left: 0; top: 380px;
+  width: 768px; height: 60px; background: #fff;
+  display: none;
+}
+.pad-bar-wrap {
+  position: absolute; left: 16px; top: 29px;
+  width: 622px; height: 2px; background: #e8ecef;
+}
+.pad-bar-active { position: absolute; left: 0; top: 0; height: 2px; background: #000; transition: left 0.3s, width 0.3s; }
+.pad-bt { position: absolute; left: 668px; top: 20px; width: 84px; height: 20px; }
+.pad-bt-prev, .pad-bt-next, .pad-bt-stop {
+  position: absolute; background: none; border: none;
+  cursor: pointer; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.pad-bt-prev { left: 0; top: 2px; width: 16px; height: 16px; }
+.pad-bt-sep  { position: absolute; left: 26.5px; top: 5px; width: 1.5px; height: 10px; background: #d3dadf; }
+.pad-bt-next { left: 38px; top: 2px; width: 16px; height: 16px; }
+.pad-bt-stop { left: 64px; top: 0; width: 20px; height: 20px; }
+</style>
+</head>
+<body>
+
+<div class="global-header"><div class="global-header-inner"><img class="header-logo" src="header-logo.svg" alt=""><span class="header-divider"></span>홈 최상단 배너 프리뷰</div></div>
+<div class="main-content">
+
+<!-- Left Panel -->
+<div class="left-panel">
+  <div class="panel-header">네이버쇼핑 최상단 배너 관리</div>
+
+  <div class="left-scroll">
+  <div class="form-section">
+    <div class="section-title" id="formTitle">배너 등록</div>
+
+    <div class="form-group-block" style="border-top:none; padding-top:0;">
+      <div class="form-group-label"><span class="group-num">1</span> 배너 유형<button type="button" class="example-btn" onclick="openTypeExample()">예시 보기</button></div>
+      <div class="form-group-desc">4가지 배너 유형 중 한가지를 선택하여 등록해 주세요.</div>
+      <div class="type-tabs">
+        <button class="type-tab active" id="typeTabText" onclick="switchTypeUI('text')">텍스트형</button>
+        <button class="type-tab" id="typeTabLogo" onclick="switchTypeUI('logo')">로고형</button>
+        <button class="type-tab" id="typeTabProduct" onclick="switchTypeUI('product-text')">상품조합형(텍스트)</button>
+        <button class="type-tab" id="typeTabProductLogo" onclick="switchTypeUI('product-logo')">상품조합형(로고)</button>
+      </div>
+    </div>
+
+    <div class="form-group-block">
+      <div class="form-group-label"><span class="group-num">2</span> 배너 이미지<button type="button" class="example-btn" id="imageGuideBtn" onclick="openImageGuide()">제작 가이드</button></div>
+      <div class="form-group-desc desc-warn"><span class="ic-info"></span>밝은(흰색/회색) 배경의 이미지 사용을 금지합니다.</div>
+      <div class="field-group">
+        <div class="upload-area" id="uploadArea" onclick="document.getElementById('fImg').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleUploadDrop(event,'img')">
+          <input type="file" id="fImg" accept="image/*" onchange="onImageSelect(event)">
+          <img id="uploadThumb" class="thumb" style="display:none">
+          <div class="upload-empty" id="uploadEmpty">
+            <div class="upload-icon">
+              <i class="upload-icon-glyph"></i>
+            </div>
+            <div class="upload-title">배너 이미지 업로드</div>
+            <div class="upload-hint">‘클릭’ 또는 ‘드래그’ 하여 파일을 업로드하세요.</div>
+          </div>
+          <div class="upload-actions" id="uploadActions" style="display:none">
+            <button type="button" onclick="event.stopPropagation(); document.getElementById('fImg').click()">수정</button>
+            <button type="button" onclick="event.stopPropagation(); clearImage()">삭제</button>
+          </div>
+        </div>
+        <div class="upload-sub-out">* 등록 이미지 사이즈 : 1125 x 540px</div>
+        <div class="bright-warn" id="brightWarn" style="display:none"><strong>⚠️ 배너 이미지가 너무 밝습니다.</strong><br>텍스트 가독성을 위해 어둡고 컬러감 있는 배너 이미지로 반드시 교체해 주세요.<span class="bright-warn-note">※ 본 경고를 무시할 경우 별도의 안내 없이 해당 배너의 노출이 차단될 수 있습니다.</span></div>
+      </div>
+    </div>
+
+    <div class="form-group-block" id="logoGroup" style="display:none;">
+      <div class="form-group-label"><span class="group-num">3</span> 로고 이미지<button type="button" class="example-btn" onclick="openLogoGuide()">제작 가이드</button></div>
+      <div class="field-group">
+        <div class="upload-area" id="logoUploadArea" onclick="document.getElementById('fLogo').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleUploadDrop(event,'logo')">
+          <input type="file" id="fLogo" accept="image/*" onchange="onLogoSelect(event)">
+          <img id="logoThumb" class="thumb" style="display:none">
+          <div class="upload-empty" id="logoEmpty">
+            <div class="upload-icon">
+              <i class="upload-icon-glyph"></i>
+            </div>
+            <div class="upload-title">로고 이미지 업로드</div>
+            <div class="upload-hint">‘클릭’ 또는 ‘드래그’ 하여 파일을 업로드하세요.</div>
+          </div>
+          <div class="upload-actions" id="logoActions" style="display:none">
+            <button type="button" onclick="event.stopPropagation(); document.getElementById('fLogo').click()">수정</button>
+            <button type="button" onclick="event.stopPropagation(); clearLogo()">삭제</button>
+          </div>
+        </div>
+        <div class="upload-sub-out">* 등록 이미지 사이즈 : W 690 x H 제한없음</div>
+      </div>
+    </div>
+
+    <div class="form-group-block" id="contentGroup">
+      <div class="form-group-label"><span class="group-num" id="contentGroupNum">3</span> <span id="contentGroupTitle">텍스트 입력</span><button type="button" class="example-btn" id="textGuideBtn" onclick="openTextGuide()">텍스트 가이드</button></div>
+      <div class="form-group-desc desc-warn"><span class="ic-info"></span>오브젝트와 텍스트가 겹치지 않도록 주의해주세요.</div>
+
+      <div class="text-card">
+        <div class="subsection" id="titleSubsection">
+          <div class="subsection-label">메인 타이틀</div>
+          <div class="field-group">
+            <input type="text" class="field-input" id="fTitle1" placeholder="최대 12자 입력" maxlength="12" oninput="updateCounter('fTitle1','cntTitle1');updateUploadPreview()">
+            <div class="char-counter"><span id="cntTitle1">0</span> / 12자</div>
+          </div>
+          <div class="field-group" id="title2Group">
+            <input type="text" class="field-input" id="fTitle2" placeholder="최대 12자 입력" maxlength="12" oninput="updateCounter('fTitle2','cntTitle2');updateUploadPreview()">
+            <div class="char-counter"><span id="cntTitle2">0</span> / 12자</div>
+          </div>
+          <div class="upload-sub-out" id="titleNote">* 타이틀은 한줄씩 별도 입력합니다.</div>
+        </div>
+
+        <div class="subsection" id="subSubsection">
+          <div class="subsection-label">서브 텍스트</div>
+          <div class="field-group">
+            <input type="text" class="field-input" id="fSub" placeholder="최대 20자 입력" maxlength="20" oninput="updateCounter('fSub','cntSub');updateUploadPreview()">
+            <div class="char-counter"><span id="cntSub">0</span> / 20자</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group-block" id="subLogoGroup">
+      <div class="form-group-label"><span class="group-num" id="subLogoGroupNum">4</span> 서브 로고<button type="button" class="example-btn" onclick="openSubLogoGuide()">제작 가이드</button></div>
+      <div class="form-group-desc">배너 우측 상단에 노출되는 로고입니다. (선택)</div>
+      <div class="field-group">
+        <div class="upload-area" id="subLogoUploadArea" onclick="document.getElementById('fSubLogo').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleUploadDrop(event,'sublogo')">
+          <input type="file" id="fSubLogo" accept="image/*" onchange="onSubLogoSelect(event)">
+          <img id="subLogoThumb" class="thumb" style="display:none">
+          <div class="upload-empty" id="subLogoEmpty">
+            <div class="upload-icon">
+              <i class="upload-icon-glyph"></i>
+            </div>
+            <div class="upload-title">서브 로고 업로드</div>
+            <div class="upload-hint">‘클릭’ 또는 ‘드래그’ 하여 파일을 업로드하세요.</div>
+          </div>
+          <div class="upload-actions" id="subLogoActions" style="display:none">
+            <button type="button" onclick="event.stopPropagation(); document.getElementById('fSubLogo').click()">수정</button>
+            <button type="button" onclick="event.stopPropagation(); clearSubLogo()">삭제</button>
+          </div>
+        </div>
+        <div class="upload-sub-out">* 등록 이미지 사이즈 : W 360 x H 최대 168px</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="list-section">
+    <div class="section-title">배너 목록</div>
+    <div class="list-subhead">
+      <span class="list-help">배너 목록을 드래그하면 순서 변경이 가능합니다.</span>
+      <span class="list-count" id="listCount"></span>
+    </div>
+    <div id="bannerList"></div>
+    <button class="btn-reset" style="width:100%; margin-top:12px;" onclick="exportDefaults()">현재 배너를 기본값으로 저장 (defaults.json 다운로드)</button>
+  </div>
+  </div><!-- /.left-scroll -->
+
+  <div class="left-footer">
+    <button class="btn-primary" id="submitBtn" onclick="submitBanner()">배너 등록</button>
+    <div class="btn-row">
+      <button class="btn-cancel" id="cancelBtn" style="display:none" onclick="cancelEdit()">취소</button>
+      <button class="btn-reset" onclick="resetForm()">초기화</button>
+    </div>
+  </div>
+</div>
+
+<!-- Right Panel -->
+<div class="right-panel">
+  <div class="preview-header">
+    <div class="preview-tabs">
+      <div class="preview-tab" onclick="switchTab('mo',this)">MO 미리보기</div>
+      <div class="preview-tab" onclick="switchTab('pad',this)">PAD 미리보기</div>
+      <div class="preview-tab active" onclick="switchTab('pc',this)">PC 미리보기</div>
+    </div>
+
+    <div class="guide-bar" id="guideBar">
+      <label class="guide-switch">
+        <input type="checkbox" id="guideToggle" checked onchange="toggleGuide(this.checked)">
+        <span class="guide-switch-track"><span class="guide-switch-knob"></span></span>
+        <span class="guide-switch-label">오브젝트 영역 가이드</span>
+      </label>
+      <div class="guide-type-seg" id="guideTypeSeg">
+        <button class="active" data-t="product" onclick="setGuideType('product',this)">제품</button>
+        <button data-t="person" onclick="setGuideType('person',this)">인물</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-content">
+    <!-- MO -->
+    <div class="preview-pane" id="pane-mo">
+      <div class="mo-frame">
+        <img class="mo-bg" src="bg-mo.png?v=2" alt="">
+        <div class="mo-banner-area" id="moBannerArea">
+          <div class="mo-banner-track" id="moTrack"></div>
+          <div class="mo-indicator" id="moInd" style="display:none">
+            <div class="mo-ind-play" onclick="toggleMoPlay()">
+              <svg id="moPlaySvg" width="14" height="14" viewBox="0 0 14 14"></svg>
+            </div>
+            <div class="mo-ind-num">
+              <span class="mo-ind-cur" id="moCur">1</span>
+              <span class="mo-ind-sep">/</span>
+              <span class="mo-ind-tot" id="moTot">1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAD -->
+    <div class="preview-pane" id="pane-pad">
+      <div class="pad-outer" id="padOuter">
+        <div class="pad-scale-wrapper" id="padWrapper">
+          <div class="pad-frame">
+            <img class="pad-bg" src="bg-pad.png" alt="">
+            <div class="pad-banner-viewport" id="padViewport">
+              <div class="pad-banner-track" id="padTrack"></div>
+            </div>
+            <div class="pad-indicator" id="padInd">
+              <div class="pad-bar-wrap">
+                <div class="pad-bar-active" id="padBarActive"></div>
+              </div>
+              <div class="pad-bt">
+                <button class="pad-bt-prev" onclick="padStep(-1)">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10.332 13L5.33203 8L10.332 3" stroke="#121212" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <div class="pad-bt-sep"></div>
+                <button class="pad-bt-next" onclick="padStep(1)">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M5.668 13L10.668 8L5.668 3" stroke="#121212" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button class="pad-bt-stop" id="padPlayBtn" onclick="togglePadPlay()">
+                  <svg width="20" height="20" viewBox="0 0 20 20" id="padPlaySvg"></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PC -->
+    <div class="preview-pane active" id="pane-pc">
+      <div class="pc-outer" id="pcOuter">
+        <div class="pc-scale-wrapper" id="pcWrapper">
+          <div class="pc-frame">
+            <img class="pc-bg" src="bg-pc.png?v=2" alt="">
+            <div class="pc-white-overlay"></div>
+            <div class="pc-banner-viewport" id="pcViewport">
+              <div class="pc-banner-track" id="pcTrack"></div>
+            </div>
+            <div class="pc-indicator" id="pcInd" style="display:none">
+              <div class="pc-bar-wrap">
+                <div class="pc-bar-active" id="pcBarActive"></div>
+              </div>
+              <div class="pc-bt">
+                <button class="pc-bt-prev" onclick="pcStep(-1)">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10.332 13L5.33203 8L10.332 3" stroke="#121212" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <div class="pc-bt-sep"></div>
+                <button class="pc-bt-next" onclick="pcStep(1)">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M5.668 13L10.668 8L5.668 3" stroke="#121212" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button class="pc-bt-stop" id="pcPlayBtn" onclick="togglePcPlay()">
+                  <svg width="20" height="20" viewBox="0 0 20 20" id="pcPlaySvg"></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /.main-content -->
+
+<script>
+const STORAGE_KEY = 'naver_top_banners_v1';
+// ⚠️ defaults.json(기본 배너)을 갱신할 때마다 이 값을 바꾸면, 기존 방문자도 다음 접속 시 자동으로 새 기본 배너로 갱신됩니다.
+const DEFAULTS_VERSION = '2026-06-29';
+const VERSION_KEY = 'naver_top_banners_defaults_ver';
+let banners = [];
+let editingId = null;
+let pendingImg = null;
+let pendingLogoImg = null;
+let pendingSubLogo = null;
+let currentType = 'text';
+// 편집 모드에서 로고형 / 상품조합형(로고)의 로고를 유형별로 기억 (규격이 달라 서로 공유하지 않음)
+let editLogoByType = {};
+
+// MO state
+let moIdx = 0, moPlaying = false, moTimer = null;
+// PC state
+let pcIdx = 0, pcPlaying = false, pcTimer = null;
+
+// Live preview helpers
+function getDraftBanner() {
+  const t1 = document.getElementById('fTitle1').value.trim();
+  const t2 = document.getElementById('fTitle2').value.trim();
+  const sub = document.getElementById('fSub').value.trim();
+  const hasContent = t1 || t2 || sub || pendingImg || pendingLogoImg;
+  if (!hasContent) return null;
+  let title = '';
+  if (currentType === 'text') title = [t1, t2].filter(Boolean).join('\n');
+  else if (currentType === 'product-text') title = t1;
+  return {
+    id: '__draft__',
+    type: currentType,
+    title: title,
+    subText: sub,
+    bgImage: pendingImg,
+    logoImg: (currentType === 'logo' || currentType === 'product-logo') ? pendingLogoImg : null,
+    subLogo: pendingSubLogo
+  };
+}
+function effectiveBanners() {
+  const draft = getDraftBanner();
+  if (!draft) return banners;
+  if (editingId !== null) return banners.map(b => b.id === editingId ? Object.assign({}, draft, { id: b.id }) : b);
+  return [draft, ...banners];
+}
+function renderPreviews() {
+  renderMo(); renderPad(); renderPc();
+  if (editingId !== null) {
+    const idx = banners.findIndex(x => x.id === editingId);
+    if (idx >= 0) {
+      moIdx = idx; moMove(false); moUpdateInd();
+      padIdx = idx; padMove(false); padUpdateInd();
+      pcIdx = idx; pcMove(false); pcUpdateInd();
+    }
+  }
+  updateObjGuides();
+  updateBrightBlocks();
+}
+
+/* ---- Object safe-area guide (원본 1125x540 기준 여백을 비율로 환산) ---- */
+let guideObjType = 'product'; // 'product' | 'person'
+const OBJ_GUIDE = { side: 48 / 1125, topProduct: 60 / 540, topPerson: 30 / 540, bottom: 60 / 540 };
+
+function toggleGuide(on) {
+  document.body.classList.toggle('guides-on', on);
+  document.getElementById('guideBar').classList.toggle('on', on);
+  if (on) updateObjGuides();
+}
+function setGuideType(t, el) {
+  guideObjType = t;
+  el.parentElement.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === el));
+  updateObjGuides();
+}
+/* 로고 PNG의 투명 여백을 제외한 '실제 보이는' 가로 범위(좌/우 비율)를 알파 채널로 계산해 캐시 */
+const _logoTrimCache = {};
+function getLogoTrim(src, cb) {
+  const cached = _logoTrimCache[src];
+  if (cached === 'pending') return;
+  if (cached) { cb(cached); return; }
+  _logoTrimCache[src] = 'pending';
+  const img = new Image();
+  img.onload = () => {
+    let trim = { leftFrac: 0, rightFrac: 1 };
+    try {
+      const w = img.naturalWidth, h = img.naturalHeight;
+      const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+      const ctx = cv.getContext('2d'); ctx.drawImage(img, 0, 0);
+      const data = ctx.getImageData(0, 0, w, h).data;
+      let minX = w, maxX = -1;
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          if (data[(y * w + x) * 4 + 3] > 10) { if (x < minX) minX = x; if (x > maxX) maxX = x; }
+        }
+      }
+      if (maxX >= 0) trim = { leftFrac: minX / w, rightFrac: (maxX + 1) / w };
+    } catch (e) {}
+    _logoTrimCache[src] = trim; cb(trim);
+  };
+  img.onerror = () => { _logoTrimCache[src] = { leftFrac: 0, rightFrac: 1 }; cb(_logoTrimCache[src]); };
+  img.src = src;
+}
+
+function updateObjGuides() {
+  if (!document.body.classList.contains('guides-on')) return;
+  const topFrac = guideObjType === 'person' ? OBJ_GUIDE.topPerson : OBJ_GUIDE.topProduct;
+  const botFrac = guideObjType === 'person' ? OBJ_GUIDE.topPerson : OBJ_GUIDE.bottom; // 인물은 하단도 30px
+  document.querySelectorAll('.obj-guide').forEach(g => {
+    const slide = g.parentElement;
+    const sr = slide.getBoundingClientRect();
+    if (!sr.width || !sr.height) return; // 숨겨진 탭은 건너뜀
+    // 좌측 콘텐츠(텍스트)의 오른쪽 끝 측정
+    let contentRight = 0;
+    slide.querySelectorAll(
+      '.mo-slide-title,.mo-slide-sub,.pc-slide-title,.pc-slide-sub,.pad-slide-title,.pad-slide-sub'
+    ).forEach(el => {
+      const r = el.getBoundingClientRect();
+      const right = r.right - sr.left;
+      if (right > contentRight) contentRight = right;
+    });
+    // 로고는 등록 캔버스 폭이 아닌 '실제 보이는 부분'의 오른쪽 끝으로 반영 (투명 여백 제외)
+    const logoEl = slide.querySelector('.mo-slide-logo,.pc-slide-logo,.pad-slide-logo');
+    if (logoEl && logoEl.src) {
+      const lr = logoEl.getBoundingClientRect();
+      const trim = _logoTrimCache[logoEl.src];
+      if (trim && trim !== 'pending') {
+        const visRight = (lr.left - sr.left) + lr.width * trim.rightFrac;
+        if (visRight > contentRight) contentRight = visRight;
+      } else {
+        getLogoTrim(logoEl.src, () => updateObjGuides()); // 계산 후 재실행
+        const fullRight = (lr.left - sr.left) + lr.width;   // 계산 전 임시: 전체 폭(겹침 방지)
+        if (fullRight > contentRight) contentRight = fullRight;
+      }
+    }
+    // 플랫폼별 텍스트-박스 간격 / 우측 여백 (각 미리보기 px 기준)
+    const baseSide = OBJ_GUIDE.side * sr.width;
+    let gapPx = baseSide, rightPx = baseSide;
+    if (slide.classList.contains('pc-slide'))  { gapPx = 46; rightPx = 23; }
+    if (slide.classList.contains('pad-slide')) { gapPx = 72; rightPx = 20; }
+    let leftFrac = contentRight > 0 ? (contentRight + gapPx) / sr.width : (baseSide / sr.width);
+    if (leftFrac < 0) leftFrac = 0;
+    const rightInset = rightPx / sr.width;
+    const rightFrac = 1 - rightInset;
+    if (leftFrac > rightFrac - 0.001) leftFrac = rightFrac - 0.001; // 텍스트가 영역을 다 차지한 경우 클램프
+    g.style.left = (leftFrac * 100) + '%';
+    g.style.right = (rightInset * 100) + '%';
+    g.style.top = (topFrac * 100) + '%';
+    g.style.bottom = (botFrac * 100) + '%';
+    g.classList.toggle('danger', (rightFrac - leftFrac) < 0.12);
+  });
+}
+
+/* ---- Data ---- */
+function load() {
+  try { banners = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { banners = []; }
+}
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(banners));
+}
+// 저장된 배너가 없거나, 기본값 버전이 바뀐 경우 defaults.json으로 (재)시드
+async function loadDefaultsIfEmpty() {
+  try {
+    const res = await fetch('defaults.json', { cache:'no-store' });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!Array.isArray(data) || !data.length) return;
+    banners = data;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(banners));
+    localStorage.setItem(VERSION_KEY, DEFAULTS_VERSION);
+    renderAll();
+  } catch {}
+}
+
+/* ---- Form changes → live preview (right panel only) ---- */
+let _previewRenderTimer = null;
+function schedulePreviewRender() {
+  if (_previewRenderTimer) cancelAnimationFrame(_previewRenderTimer);
+  _previewRenderTimer = requestAnimationFrame(() => { _previewRenderTimer = null; renderPreviews(); });
+}
+function updateUploadPreview() { schedulePreviewRender(); }
+
+/* ---- Type switch (preserves per-type form drafts) ---- */
+const formDrafts = {};
+
+function saveDraft(type) {
+  formDrafts[type] = {
+    title1: document.getElementById('fTitle1').value,
+    title2: document.getElementById('fTitle2').value,
+    sub: document.getElementById('fSub').value,
+    bgImage: pendingImg,
+    logoImg: pendingLogoImg,
+    subLogo: pendingSubLogo
+  };
+}
+
+function loadDraft(type) {
+  const d = formDrafts[type] || { title1: '', title2: '', sub: '', bgImage: null, logoImg: null, subLogo: null };
+  document.getElementById('fTitle1').value = d.title1 || '';
+  document.getElementById('fTitle2').value = d.title2 || '';
+  document.getElementById('fSub').value = d.sub || '';
+  pendingImg = d.bgImage || null;
+  pendingLogoImg = d.logoImg || null;
+  pendingSubLogo = d.subLogo || null;
+  setSubLogoUI(pendingSubLogo);
+  // bg image UI
+  if (pendingImg) {
+    const t = document.getElementById('uploadThumb');
+    t.src = pendingImg; t.style.display = 'block';
+    document.getElementById('uploadEmpty').style.display = 'none';
+    document.getElementById('uploadActions').style.display = 'flex';
+  } else {
+    document.getElementById('uploadThumb').style.display = 'none';
+    document.getElementById('uploadThumb').src = '';
+    document.getElementById('uploadEmpty').style.display = 'flex';
+    document.getElementById('uploadActions').style.display = 'none';
+    document.getElementById('fImg').value = '';
+  }
+  // logo UI
+  if (pendingLogoImg) {
+    const lt = document.getElementById('logoThumb');
+    lt.src = pendingLogoImg; lt.style.display = 'block';
+    document.getElementById('logoEmpty').style.display = 'none';
+    document.getElementById('logoActions').style.display = 'flex';
+  } else {
+    document.getElementById('logoThumb').style.display = 'none';
+    document.getElementById('logoThumb').src = '';
+    document.getElementById('logoEmpty').style.display = 'flex';
+    document.getElementById('logoActions').style.display = 'none';
+    document.getElementById('fLogo').value = '';
+  }
+  checkBgBrightness(pendingImg);
+  updateCounter('fTitle1','cntTitle1');
+  updateCounter('fTitle2','cntTitle2');
+  updateCounter('fSub','cntSub');
+}
+
+function switchTypeUI(type) {
+  if (type === currentType) return;
+  if (editingId === null) {
+    saveDraft(currentType);
+    loadDraft(type);
+  } else {
+    // 편집 모드: 로고는 유형별로 관리. 로고형 ↔ 상품조합형(로고)는 규격이 달라 서로 공유하지 않고,
+    // 각 유형의 원래(또는 편집한) 로고를 기억했다가 해당 유형으로 돌아오면 다시 노출한다.
+    if (currentType === 'logo' || currentType === 'product-logo') {
+      editLogoByType[currentType] = pendingLogoImg;
+    }
+    const nextLogo = (type === 'logo' || type === 'product-logo') ? (editLogoByType[type] || null) : null;
+    setLogoUI(nextLogo);
+  }
+  setType(type);
+  if (editingId !== null) {
+    const idx = banners.findIndex(x => x.id === editingId);
+    if (idx >= 0) {
+      requestAnimationFrame(() => {
+        moIdx = idx; moMove(false); moUpdateInd();
+        padIdx = idx; padMove(false); padUpdateInd();
+        pcIdx = idx; pcMove(false); pcUpdateInd();
+      });
+    }
+  }
+}
+
+function setType(type) {
+  currentType = type;
+  document.getElementById('typeTabText').classList.toggle('active', type === 'text');
+  document.getElementById('typeTabLogo').classList.toggle('active', type === 'logo');
+  document.getElementById('typeTabProduct').classList.toggle('active', type === 'product-text');
+  document.getElementById('typeTabProductLogo').classList.toggle('active', type === 'product-logo');
+  const isLogo = (type === 'logo' || type === 'product-logo');
+  document.getElementById('logoGroup').style.display = isLogo ? '' : 'none';
+  // 타이틀 입력은 텍스트형 계열에서만, 서브텍스트는 모든 유형 공통
+  document.getElementById('titleSubsection').style.display = isLogo ? 'none' : '';
+  document.getElementById('contentGroup').classList.toggle('logo-only', isLogo);
+  document.getElementById('title2Group').style.display = type === 'product-text' ? 'none' : '';
+  document.getElementById('titleNote').style.display = type === 'text' ? '' : 'none';
+  document.getElementById('textGuideBtn').style.display = 'inline-flex';
+  // 서브 로고 그룹 번호: 로고형이면 5, 그 외엔 4
+  document.getElementById('subLogoGroupNum').textContent = isLogo ? '5' : '4';
+  // 그룹 번호: 로고형이면 로고이미지=3 / 텍스트입력=4, 그 외엔 텍스트입력=3
+  document.getElementById('contentGroupNum').textContent = isLogo ? '4' : '3';
+  // 그룹 제목은 항상 '텍스트 입력' (로고형은 타이틀 없이 서브 텍스트만 노출)
+  document.getElementById('contentGroupTitle').textContent = '텍스트 입력';
+  document.getElementById('imageGuideBtn').style.display = 'inline-flex';
+  updateUploadPreview();
+}
+
+function openTypeExample() {
+  const typeMap = { 'text': 0, 'logo': 1, 'product-text': 2, 'product-logo': 3 };
+  const idx = typeMap[currentType] || 0;
+  const tabs = document.querySelectorAll('#typeExampleModal .modal-tab');
+  tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
+  document.getElementById('typeExampleImg').src = tabs[idx].dataset.img;
+  document.getElementById('typeExampleModal').classList.add('show');
+}
+function closeTypeExample() { document.getElementById('typeExampleModal').classList.remove('show'); }
+function switchExampleTab(btn) {
+  document.querySelectorAll('#typeExampleModal .modal-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('typeExampleImg').src = btn.dataset.img;
+}
+function openImageGuide() {
+  const tabs = document.querySelectorAll('#imageGuideModal .modal-tab');
+  tabs.forEach((t, i) => t.classList.toggle('active', i === 0));
+  document.getElementById('imageGuideImg').src = tabs[0].dataset.img;
+  document.getElementById('imageGuideModal').classList.add('show');
+}
+function switchImageGuideTab(btn) {
+  document.querySelectorAll('#imageGuideModal .modal-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('imageGuideImg').src = btn.dataset.img;
+}
+function closeImageGuide() { document.getElementById('imageGuideModal').classList.remove('show'); }
+
+function openLogoGuide() {
+  const img = currentType === 'product-logo' ? 'logo-guide-product.png' : 'logo-guide.png';
+  document.getElementById('logoGuideImg').src = img + '?v=1';
+  document.getElementById('logoGuideModal').classList.add('show');
+}
+function closeLogoGuide() { document.getElementById('logoGuideModal').classList.remove('show'); }
+
+function openTextGuide() { document.getElementById('textGuideModal').classList.add('show'); }
+function closeTextGuide() { document.getElementById('textGuideModal').classList.remove('show'); }
+
+function openSubLogoGuide() { document.getElementById('subLogoGuideModal').classList.add('show'); }
+function closeSubLogoGuide() { document.getElementById('subLogoGuideModal').classList.remove('show'); }
+
+function setSubLogoUI(src) {
+  const t = document.getElementById('subLogoThumb');
+  if (src) {
+    t.src = src; t.style.display = 'block';
+    document.getElementById('subLogoEmpty').style.display = 'none';
+    document.getElementById('subLogoActions').style.display = 'flex';
+  } else {
+    t.style.display = 'none'; t.src = '';
+    document.getElementById('subLogoEmpty').style.display = 'flex';
+    document.getElementById('subLogoActions').style.display = 'none';
+    document.getElementById('fSubLogo').value = '';
+  }
+}
+
+function onSubLogoSelect(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    pendingSubLogo = ev.target.result;
+    setSubLogoUI(pendingSubLogo);
+    updateUploadPreview();
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearSubLogo() {
+  pendingSubLogo = null;
+  setSubLogoUI(null);
+  if (editingId !== null) {
+    const b = banners.find(x => x.id === editingId);
+    if (b) b.subLogo = null;
+  }
+  updateUploadPreview();
+}
+
+function onLogoSelect(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    pendingLogoImg = ev.target.result;
+    const t = document.getElementById('logoThumb');
+    t.src = pendingLogoImg; t.style.display = 'block';
+    document.getElementById('logoEmpty').style.display = 'none';
+    document.getElementById('logoActions').style.display = 'flex';
+    updateUploadPreview();
+  };
+  reader.readAsDataURL(file);
+}
+
+/* 배너 이미지 밝기 분석 — 흰/밝은 배경 경고
+   기준: 밝은 배너 샘플의 최저치(avg 200.5 / 밝은픽셀 15.4%)에 맞춤.
+   어두운 배너 범위는 고려하지 않고, 밝은 배너 수준 이상이면 경고. */
+const BRIGHT_WARN = { avg: 200, brightPct: 15 };
+function analyzeBrightness(dataURL, cb) {
+  const img = new Image();
+  img.onload = () => {
+    try {
+      const S = 120, r = img.width / img.height || 1;
+      const w = S, h = Math.max(1, Math.round(S / r));
+      const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+      const ctx = cv.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
+      const d = ctx.getImageData(0, 0, w, h).data;
+      let sum = 0, bright = 0, n = w * h;
+      for (let i = 0; i < d.length; i += 4) {
+        const L = 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
+        sum += L; if (L > 220) bright++;
+      }
+      cb({ avg: sum / n, brightPct: bright / n * 100 });
+    } catch (e) { cb(null); }
+  };
+  img.onerror = () => cb(null);
+  img.src = dataURL;
+}
+function checkBgBrightness(dataURL) {
+  const el = document.getElementById('brightWarn');
+  if (!el) return;
+  if (!dataURL) { el.style.display = 'none'; return; }
+  analyzeBrightness(dataURL, r => {
+    el.style.display = (r && (r.avg >= BRIGHT_WARN.avg || r.brightPct >= BRIGHT_WARN.brightPct)) ? 'block' : 'none';
+  });
+}
+
+/* 밝은 배경 배너 → 미리보기 슬라이드에 "사용 불가" 오버레이 (src별 캐시) */
+const _brightCache = {};
+function ensureBright(src, cb) {
+  if (src in _brightCache) { cb(_brightCache[src]); return; }
+  analyzeBrightness(src, r => {
+    _brightCache[src] = !!(r && (r.avg >= BRIGHT_WARN.avg || r.brightPct >= BRIGHT_WARN.brightPct));
+    cb(_brightCache[src]);
+  });
+}
+function updateBrightBlocks() {
+  document.querySelectorAll('.mo-slide, .pc-slide, .pad-slide').forEach(slide => {
+    const block = slide.querySelector('.bright-block');
+    if (!block) return;
+    const img = slide.querySelector('.mo-slide-bg, .pc-slide-bg, .pad-slide-bg');
+    const src = img && img.getAttribute('src');
+    if (!src) { block.style.display = 'none'; return; }
+    if (src in _brightCache) {
+      block.style.display = _brightCache[src] ? 'flex' : 'none';
+    } else {
+      block.style.display = 'none';
+      ensureBright(src, () => updateBrightBlocks()); // 계산 후 재반영
+    }
+  });
+}
+
+function applyUpload(kind, dataURL) {
+  if (kind === 'img') {
+    pendingImg = dataURL;
+    const t = document.getElementById('uploadThumb');
+    t.src = dataURL; t.style.display = 'block';
+    document.getElementById('uploadEmpty').style.display = 'none';
+    document.getElementById('uploadActions').style.display = 'flex';
+    checkBgBrightness(dataURL);
+  } else if (kind === 'logo') {
+    pendingLogoImg = dataURL;
+    const t = document.getElementById('logoThumb');
+    t.src = dataURL; t.style.display = 'block';
+    document.getElementById('logoEmpty').style.display = 'none';
+    document.getElementById('logoActions').style.display = 'flex';
+  } else if (kind === 'sublogo') {
+    pendingSubLogo = dataURL;
+    setSubLogoUI(dataURL);
+  }
+  updateUploadPreview();
+}
+function handleUploadDrop(e, kind) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  const file = (e.dataTransfer && e.dataTransfer.files || [])[0];
+  if (!file || !file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = ev => applyUpload(kind, ev.target.result);
+  reader.readAsDataURL(file);
+}
+
+function onImageSelect(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    pendingImg = ev.target.result;
+    const t = document.getElementById('uploadThumb');
+    t.src = pendingImg; t.style.display = 'block';
+    document.getElementById('uploadEmpty').style.display = 'none';
+    document.getElementById('uploadActions').style.display = 'flex';
+    checkBgBrightness(pendingImg);
+    updateUploadPreview();
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearImage() {
+  pendingImg = null;
+  document.getElementById('fImg').value = '';
+  document.getElementById('uploadThumb').style.display = 'none';
+  document.getElementById('uploadThumb').src = '';
+  document.getElementById('uploadEmpty').style.display = 'flex';
+  document.getElementById('uploadActions').style.display = 'none';
+  checkBgBrightness(null);
+  if (editingId !== null) {
+    const b = banners.find(x => x.id === editingId);
+    if (b) b.bgImage = null;
+  }
+  updateUploadPreview();
+}
+
+// 로고 pending 값과 업로드 영역 UI를 함께 갱신 (src가 없으면 업로드 안내 상태로)
+function setLogoUI(src) {
+  pendingLogoImg = src || null;
+  const lt = document.getElementById('logoThumb');
+  if (pendingLogoImg) {
+    lt.src = pendingLogoImg; lt.style.display = 'block';
+    document.getElementById('logoEmpty').style.display = 'none';
+    document.getElementById('logoActions').style.display = 'flex';
+  } else {
+    lt.style.display = 'none'; lt.src = '';
+    document.getElementById('logoEmpty').style.display = 'flex';
+    document.getElementById('logoActions').style.display = 'none';
+    document.getElementById('fLogo').value = '';
+  }
+}
+
+function clearLogo() {
+  pendingLogoImg = null;
+  document.getElementById('fLogo').value = '';
+  document.getElementById('logoThumb').style.display = 'none';
+  document.getElementById('logoThumb').src = '';
+  document.getElementById('logoEmpty').style.display = 'flex';
+  document.getElementById('logoActions').style.display = 'none';
+  if (currentType === 'logo' || currentType === 'product-logo') {
+    editLogoByType[currentType] = null;
+  }
+  if (editingId !== null) {
+    const b = banners.find(x => x.id === editingId);
+    if (b) b.logoImg = null;
+  }
+  updateUploadPreview();
+}
+
+function submitBanner() {
+  const sub = document.getElementById('fSub').value.trim();
+  let title = '', logoImg = null;
+
+  if (currentType === 'text' || currentType === 'product-text') {
+    const t1 = document.getElementById('fTitle1').value.trim();
+    const t2 = document.getElementById('fTitle2').value.trim();
+    if (!t1 && !t2) { alert('배너 제목을 입력해주세요.'); return; }
+    title = [t1, t2].filter(Boolean).join('\n');
+  } else if (currentType === 'logo' || currentType === 'product-logo') {
+    if (!pendingLogoImg && !editingId) { alert('로고 이미지를 등록해주세요.'); return; }
+    logoImg = pendingLogoImg;
+  }
+
+  if (editingId !== null) {
+    const b = banners.find(x => x.id === editingId);
+    if (b) {
+      b.type = currentType; b.title = title; b.subText = sub;
+      if (pendingImg) b.bgImage = pendingImg;
+      // 로고 유형이면 현재 로고 저장, 그 외 유형이면 로고 제거 (유형 전환 후 남지 않도록)
+      b.logoImg = (currentType === 'logo' || currentType === 'product-logo') ? (pendingLogoImg || null) : null;
+      b.subLogo = pendingSubLogo || null;
+    }
+    editingId = null;
+    document.getElementById('formTitle').textContent = '배너 등록';
+    document.getElementById('submitBtn').textContent = '배너 등록';
+    document.getElementById('cancelBtn').style.display = 'none';
+  } else {
+    if (banners.length >= 20) { alert('최대 20개까지 등록 가능합니다.'); return; }
+    banners.push({ id: Date.now(), type: currentType, title, subText: sub, bgImage: pendingImg || null, logoImg: logoImg || null, subLogo: pendingSubLogo || null });
+  }
+  resetForm();
+  save(); renderAll();
+}
+
+function cancelEdit() {
+  editingId = null;
+  document.getElementById('formTitle').textContent = '배너 등록';
+  document.getElementById('submitBtn').textContent = '배너 등록';
+  document.getElementById('cancelBtn').style.display = 'none';
+  resetForm();
+}
+
+function resetForm() {
+  document.getElementById('fTitle1').value = '';
+  document.getElementById('fTitle2').value = '';
+  document.getElementById('fSub').value = '';
+  document.getElementById('fImg').value = '';
+  document.getElementById('uploadThumb').style.display = 'none';
+  document.getElementById('uploadEmpty').style.display = 'flex';
+  document.getElementById('uploadActions').style.display = 'none';
+  document.getElementById('fLogo').value = '';
+  document.getElementById('logoThumb').style.display = 'none';
+  document.getElementById('logoEmpty').style.display = 'flex';
+  document.getElementById('logoActions').style.display = 'none';
+  pendingImg = null;
+  pendingLogoImg = null;
+  pendingSubLogo = null;
+  setSubLogoUI(null);
+  checkBgBrightness(null); // 초기화 시 밝기 경고 숨김
+  setType('text');
+  resetCounters();
+  updateUploadPreview();
+  Object.keys(formDrafts).forEach(k => delete formDrafts[k]);
+}
+
+function editBanner(id) {
+  const b = banners.find(x => x.id === id);
+  if (!b) return;
+  editingId = id;
+  // 편집 시작: 원래 로고를 해당 유형 슬롯에 시드 (유형 전환 후 되돌아오면 복원됨)
+  editLogoByType = {};
+  if ((b.type === 'logo' || b.type === 'product-logo') && b.logoImg) {
+    editLogoByType[b.type] = b.logoImg;
+  }
+  setType(b.type || 'text');
+  const lines = (b.title || '').split('\n');
+  document.getElementById('fTitle1').value = lines[0] || '';
+  document.getElementById('fTitle2').value = lines[1] || '';
+  document.getElementById('fSub').value = b.subText || '';
+  if (b.bgImage) {
+    const t = document.getElementById('uploadThumb');
+    t.src = b.bgImage; t.style.display = 'block';
+    document.getElementById('uploadEmpty').style.display = 'none';
+    document.getElementById('uploadActions').style.display = 'flex';
+    pendingImg = b.bgImage;
+  } else {
+    document.getElementById('uploadThumb').style.display = 'none';
+    document.getElementById('uploadEmpty').style.display = 'flex';
+    document.getElementById('uploadActions').style.display = 'none';
+    pendingImg = null;
+  }
+  if (b.logoImg) {
+    const lt = document.getElementById('logoThumb');
+    lt.src = b.logoImg; lt.style.display = 'block';
+    document.getElementById('logoEmpty').style.display = 'none';
+    document.getElementById('logoActions').style.display = 'flex';
+    pendingLogoImg = b.logoImg;
+  } else {
+    document.getElementById('logoThumb').style.display = 'none';
+    document.getElementById('logoEmpty').style.display = 'flex';
+    document.getElementById('logoActions').style.display = 'none';
+    pendingLogoImg = null;
+  }
+  pendingSubLogo = b.subLogo || null;
+  setSubLogoUI(pendingSubLogo);
+  checkBgBrightness(pendingImg); // 수정 진입 시에도 배경 밝기 경고 재평가
+  document.getElementById('formTitle').textContent = '배너 수정';
+  document.getElementById('submitBtn').textContent = '배너 수정';
+  document.getElementById('cancelBtn').style.display = 'block';
+  document.querySelector('.left-panel').scrollTop = 0;
+  updateCounter('fTitle1','cntTitle1');
+  updateCounter('fTitle2','cntTitle2');
+  updateCounter('fSub','cntSub');
+  updateUploadPreview();
+  const idx = banners.findIndex(x => x.id === id);
+  if (idx >= 0) {
+    if (_previewRenderTimer) { cancelAnimationFrame(_previewRenderTimer); _previewRenderTimer = null; }
+    renderPreviews();
+    moIdx = idx; moMove(false); moUpdateInd();
+    padIdx = idx; padMove(false); padUpdateInd();
+    pcIdx = idx; pcMove(false); pcUpdateInd();
+  }
+}
+
+function exportDefaults() {
+  if (!banners.length) { alert('등록된 배너가 없습니다.'); return; }
+  const blob = new Blob([JSON.stringify(banners, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'defaults.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  alert(banners.length + '개 배너를 defaults.json 으로 내보냈습니다.\n최상단배너 폴더에 덮어쓰기 해주세요.');
+}
+
+function deleteBanner(id) {
+  if (!confirm('배너를 삭제하시겠습니까?')) return;
+  banners = banners.filter(b => b.id !== id);
+  if (editingId === id) cancelEdit();
+  save(); renderAll();
+}
+
+/* ---- Banner List ---- */
+function renderList() {
+  const el = document.getElementById('bannerList');
+  document.getElementById('listCount').textContent = `${banners.length}/20`;
+  if (!banners.length) {
+    el.innerHTML = '<div class="empty-list">등록된 배너가 없습니다</div>';
+    return;
+  }
+  el.innerHTML = banners.map((b, i) => `
+    <div class="banner-item" draggable="true" data-id="${b.id}"
+      ondragstart="dStart(event,${b.id})" ondragover="dOver(event)"
+      ondrop="dDrop(event,${b.id})" ondragend="dEnd()">
+      <span class="drag-handle">⠿</span>
+      <span class="banner-num">${i+1}</span>
+      ${b.bgImage ? `<img class="banner-thumb" src="${b.bgImage}">` : '<div class="banner-thumb-empty"></div>'}
+      <div class="banner-info">
+        <div class="b-title">${
+          b.type === 'logo' ? '<span style="color:#000;">로고형</span>' :
+          b.type === 'product-text' ? '<span style="color:#000;">상품조합형(텍스트)</span>' :
+          b.type === 'product-logo' ? '<span style="color:#000;">상품조합형(로고)</span>' :
+          '<span style="color:#000;">텍스트형</span>'
+        }</div>
+        <div class="b-sub">${esc((b.title || '').split('\n')[0]) || esc(b.subText) || '<span style="color:#ccc">텍스트 없음</span>'}</div>
+      </div>
+      <button class="btn-edit" onclick="editBanner(${b.id})">수정</button>
+      <button class="btn-del" onclick="deleteBanner(${b.id})">삭제</button>
+    </div>
+  `).join('');
+}
+
+/* ---- MO Carousel ---- */
+function moSlide(b) {
+  const isLogo = b.type === 'logo';
+  const isProduct = b.type === 'product-text';
+  const isProductLogo = b.type === 'product-logo';
+  const contentHtml = (isLogo || isProductLogo)
+    ? (b.logoImg ? `<img class="mo-slide-logo" src="${b.logoImg}">` : '')
+    : `<div class="mo-slide-title">${esc(b.title)}</div>`;
+  const itemCards = (isProduct || isProductLogo)
+    ? `<div class="mo-item-cards"><div class="mo-item-card"></div><div class="mo-item-card"></div></div>`
+    : '';
+  const slideClass = isLogo ? ' logo-type' : isProduct ? ' product-text-type' : isProductLogo ? ' product-logo-type' : '';
+  return `<div class="mo-slide${slideClass}">
+    ${b.bgImage ? `<img class="mo-slide-bg" src="${b.bgImage}">` : '<div class="mo-slide-bg-empty"></div>'}
+    <div class="mo-slide-gradient"></div>
+    <div class="mo-slide-contents">
+      ${contentHtml}
+      ${b.subText ? `<div class="mo-slide-sub">${esc(b.subText)}</div>` : ''}
+      ${itemCards}
+    </div>
+    ${b.subLogo ? `<img class="mo-slide-sublogo" src="${b.subLogo}">` : ''}
+    <div class="obj-guide"><span class="obj-guide-label">오브젝트 영역</span></div>
+    <div class="bright-block"><span class="bb-tag"><span class="bb-x">✕</span> 이미지 사용 불가</span></div>
+  </div>`;
+}
+
+function renderMo() {
+  clearInterval(moTimer);
+  const track = document.getElementById('moTrack');
+  const ind = document.getElementById('moInd');
+  const area = document.getElementById('moBannerArea');
+  const eff = effectiveBanners();
+  if (!eff.length) {
+    track.innerHTML = '<div class="mo-slide-empty-placeholder"></div>';
+    track.style.transition = 'none';
+    track.style.transform = 'translateX(0)';
+    ind.style.display = 'flex';
+    document.getElementById('moCur').textContent = '0';
+    document.getElementById('moTot').textContent = '0';
+    const svg = document.getElementById('moPlaySvg');
+    svg.innerHTML = '<rect x="4" y="3" width="2" height="8" rx="1" fill="white"/><rect x="8" y="3" width="2" height="8" rx="1" fill="white"/>';
+    return;
+  }
+  const N = eff.length;
+  const slides = N > 1 ? [...eff, eff[0]] : [...eff];
+  track.innerHTML = slides.map(moSlide).join('');
+  moIdx = 0;
+  moMove(false);
+  ind.style.display = 'flex';
+  moUpdateInd();
+  if (moPlaying && N > 1) moTimer = setInterval(() => moStep(1), 3000);
+}
+
+function moMove(animate) {
+  const track = document.getElementById('moTrack');
+  track.style.transition = animate ? 'transform 0.4s ease' : 'none';
+  track.style.transform = `translateX(-${moIdx * 375}px)`;
+}
+
+function moStep(dir) {
+  const N = effectiveBanners().length;
+  if (N <= 1) return;
+  moIdx += dir;
+  moMove(true);
+  if (moIdx >= N) {
+    setTimeout(() => { moIdx = 0; moMove(false); moUpdateInd(); }, 420);
+  } else if (moIdx < 0) {
+    moIdx = N - 1;
+    moMove(false);
+    setTimeout(() => moUpdateInd(), 0);
+  } else {
+    moUpdateInd();
+  }
+}
+
+function moUpdateInd() {
+  const N = effectiveBanners().length;
+  const cur = N ? ((moIdx % N) + N) % N : 0;
+  document.getElementById('moCur').textContent = cur + 1;
+  document.getElementById('moTot').textContent = N;
+  const svg = document.getElementById('moPlaySvg');
+  svg.innerHTML = moPlaying
+    ? '<rect x="4" y="3" width="2" height="8" rx="1" fill="white"/><rect x="8" y="3" width="2" height="8" rx="1" fill="white"/>'
+    : '<path d="M4.5 3.5L10 7L4.5 10.5Z" fill="white" stroke="white" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>';
+}
+
+function toggleMoPlay() {
+  moPlaying = !moPlaying;
+  clearInterval(moTimer);
+  if (moPlaying && effectiveBanners().length > 1) moTimer = setInterval(() => moStep(1), 3000);
+  moUpdateInd();
+}
+
+/* ---- PC Carousel ---- */
+const PC_STEP = 552;
+
+function pcSlide(b) {
+  const isLogo = b.type === 'logo';
+  const isProduct = b.type === 'product-text';
+  const isProductLogo = b.type === 'product-logo';
+  const contentHtml = (isLogo || isProductLogo)
+    ? (b.logoImg ? `<img class="pc-slide-logo" src="${b.logoImg}">` : '')
+    : `<div class="pc-slide-title">${esc(b.title)}</div>`;
+  const itemCards = (isProduct || isProductLogo)
+    ? `<div class="pc-item-cards"><div class="pc-item-card"></div><div class="pc-item-card"></div></div>`
+    : '';
+  const slideClass = isLogo ? ' logo-type' : isProduct ? ' product-text-type' : isProductLogo ? ' product-logo-type' : '';
+  return `<div class="pc-slide${slideClass}">
+    ${b.bgImage ? `<img class="pc-slide-bg" src="${b.bgImage}">` : '<div class="pc-slide-bg-empty"></div>'}
+    <div class="pc-slide-gradient"></div>
+    <div class="pc-slide-contents">
+      ${contentHtml}
+      ${b.subText ? `<div class="pc-slide-sub">${esc(b.subText)}</div>` : ''}
+      ${itemCards}
+    </div>
+    ${b.subLogo ? `<img class="pc-slide-sublogo" src="${b.subLogo}">` : ''}
+    <div class="obj-guide"><span class="obj-guide-label">오브젝트 영역</span></div>
+    <div class="bright-block"><span class="bb-tag"><span class="bb-x">✕</span> 이미지 사용 불가</span></div>
+  </div>`;
+}
+
+function renderPc() {
+  clearInterval(pcTimer);
+  const track = document.getElementById('pcTrack');
+  const ind = document.getElementById('pcInd');
+  const vp = document.getElementById('pcViewport');
+  const eff = effectiveBanners();
+  if (!eff.length) {
+    track.innerHTML = Array(3).fill('<div class="pc-slide-empty-placeholder"></div>').join('');
+    track.style.transition = 'none';
+    track.style.transform = 'translateX(0)';
+    ind.style.display = 'flex';
+    const active = document.getElementById('pcBarActive');
+    active.style.left = '0'; active.style.width = '0';
+    const pcSvg = document.getElementById('pcPlaySvg');
+    if (pcSvg) pcSvg.innerHTML = '<rect x="5.83" y="4.375" width="2.5" height="11.25" rx="2.5" fill="#121212"/><rect x="11.67" y="4.375" width="2.5" height="11.25" rx="2.5" fill="#121212"/>';
+    return;
+  }
+  const N = eff.length;
+  let slides;
+  if (N === 1) {
+    slides = [eff[0], eff[0], eff[0]];
+  } else {
+    slides = [eff[N-1], ...eff, ...eff.slice(0, Math.min(3, N))];
+  }
+  track.innerHTML = slides.map(pcSlide).join('');
+  pcIdx = 0;
+  pcMove(false);
+  ind.style.display = 'flex';
+  pcUpdateInd();
+  if (pcPlaying && N > 1) pcTimer = setInterval(() => pcStep(1), 3000);
+}
+
+function pcMove(animate) {
+  const track = document.getElementById('pcTrack');
+  track.style.transition = animate ? 'transform 0.4s ease' : 'none';
+  track.style.transform = `translateX(-${pcIdx * PC_STEP}px)`;
+}
+
+function pcStep(dir) {
+  const N = effectiveBanners().length;
+  if (N <= 1) return;
+  clearInterval(pcTimer);
+  pcIdx += dir;
+  if (pcIdx >= N) {
+    pcMove(true);
+    setTimeout(() => { pcIdx = 0; pcMove(false); pcUpdateInd(); }, 420);
+  } else if (pcIdx < 0) {
+    pcIdx = N - 1;
+    pcMove(false);
+    setTimeout(() => { pcUpdateInd(); }, 0);
+  } else {
+    pcMove(true);
+    pcUpdateInd();
+  }
+  if (pcPlaying && N > 1) pcTimer = setInterval(() => pcStep(1), 3000);
+}
+
+function pcUpdateInd() {
+  const N = effectiveBanners().length;
+  if (!N) return;
+  const cur = ((pcIdx % N) + N) % N;
+  const segW = 846 / N;
+  const active = document.getElementById('pcBarActive');
+  active.style.left = `${cur * segW}px`;
+  active.style.width = `${segW}px`;
+  const pcSvg = document.getElementById('pcPlaySvg');
+  if (pcSvg) pcSvg.innerHTML = pcPlaying
+    ? '<rect x="5.83" y="4.375" width="2.5" height="11.25" rx="2.5" fill="#121212"/><rect x="11.67" y="4.375" width="2.5" height="11.25" rx="2.5" fill="#121212"/>'
+    : '<path fill-rule="evenodd" clip-rule="evenodd" d="M15.262 8.93607C16.0485 9.42766 16.0485 10.5731 15.262 11.0647L7.72894 15.7731C6.89298 16.2956 5.80859 15.6946 5.80859 14.7088V5.29194C5.80859 4.30612 6.89298 3.70512 7.72894 4.22763L15.262 8.93607Z" fill="#121212"/>';
+}
+
+function togglePcPlay() {
+  pcPlaying = !pcPlaying;
+  clearInterval(pcTimer);
+  if (pcPlaying && effectiveBanners().length > 1) pcTimer = setInterval(() => pcStep(1), 3000);
+  pcUpdateInd();
+}
+
+/* ---- PAD Carousel ---- */
+const PAD_STEP = 486;
+const PAD_OFFSET = -342;
+let padIdx = 0, padPlaying = false, padTimer = null;
+
+function padSlide(b) {
+  const isLogo = b.type === 'logo';
+  const isProduct = b.type === 'product-text';
+  const isProductLogo = b.type === 'product-logo';
+  const contentHtml = (isLogo || isProductLogo)
+    ? (b.logoImg ? `<img class="pad-slide-logo" src="${b.logoImg}">` : '')
+    : `<div class="pad-slide-title">${esc(b.title)}</div>`;
+  const itemCards = (isProduct || isProductLogo)
+    ? `<div class="pad-item-cards"><div class="pad-item-card"></div><div class="pad-item-card"></div></div>`
+    : '';
+  const slideClass = isLogo ? ' logo-type' : isProduct ? ' product-text-type' : isProductLogo ? ' product-logo-type' : '';
+  return `<div class="pad-slide${slideClass}">
+    ${b.bgImage ? `<img class="pad-slide-bg" src="${b.bgImage}">` : '<div class="pad-slide-bg-empty"></div>'}
+    <div class="pad-slide-contents">
+      ${contentHtml}
+      ${b.subText ? `<div class="pad-slide-sub">${esc(b.subText)}</div>` : ''}
+      ${itemCards}
+    </div>
+    ${b.subLogo ? `<img class="pad-slide-sublogo" src="${b.subLogo}">` : ''}
+    <div class="obj-guide"><span class="obj-guide-label">오브젝트 영역</span></div>
+    <div class="bright-block"><span class="bb-tag"><span class="bb-x">✕</span> 이미지 사용 불가</span></div>
+  </div>`;
+}
+
+function renderPad() {
+  clearInterval(padTimer);
+  const track = document.getElementById('padTrack');
+  const ind = document.getElementById('padInd');
+  const vp = document.getElementById('padViewport');
+  const eff = effectiveBanners();
+  if (!eff.length) {
+    track.innerHTML = Array(3).fill('<div class="pad-slide-empty-placeholder"></div>').join('');
+    track.style.transition = 'none';
+    track.style.transform = 'translateX(-342px)';
+    ind.style.display = 'block';
+    const active = document.getElementById('padBarActive');
+    active.style.left = '0'; active.style.width = '0';
+    const svg = document.getElementById('padPlaySvg');
+    svg.innerHTML = '<rect x="5.83" y="4.375" width="2.5" height="11.25" rx="2.5" fill="#121212"/><rect x="11.67" y="4.375" width="2.5" height="11.25" rx="2.5" fill="#121212"/>';
+    return;
+  }
+  const N = eff.length;
+  let slides;
+  if (N === 1) {
+    slides = [eff[0], eff[0], eff[0]];
+  } else {
+    slides = [eff[N-1], ...eff, ...eff.slice(0, Math.min(3, N))];
+  }
+  track.innerHTML = slides.map(padSlide).join('');
+  padIdx = 0;
+  padMove(false);
+  ind.style.display = 'block';
+  padUpdateInd();
+  if (padPlaying && N > 1) padTimer = setInterval(() => padStep(1), 3000);
+}
+
+function padMove(animate) {
+  const track = document.getElementById('padTrack');
+  track.style.transition = animate ? 'transform 0.4s ease' : 'none';
+  track.style.transform = `translateX(${PAD_OFFSET - padIdx * PAD_STEP}px)`;
+}
+
+function padStep(dir) {
+  const N = effectiveBanners().length;
+  if (N <= 1) return;
+  clearInterval(padTimer);
+  padIdx += dir;
+  if (padIdx >= N) {
+    padMove(true);
+    setTimeout(() => { padIdx = 0; padMove(false); padUpdateInd(); }, 420);
+  } else if (padIdx < 0) {
+    padIdx = N - 1;
+    padMove(false);
+    setTimeout(() => padUpdateInd(), 0);
+  } else {
+    padMove(true);
+    padUpdateInd();
+  }
+  if (padPlaying && N > 1) padTimer = setInterval(() => padStep(1), 3000);
+}
+
+function padUpdateInd() {
+  const N = effectiveBanners().length;
+  if (!N) return;
+  const cur = ((padIdx % N) + N) % N;
+  const segW = 622 / N;
+  const active = document.getElementById('padBarActive');
+  active.style.left = `${cur * segW}px`;
+  active.style.width = `${segW}px`;
+  const svg = document.getElementById('padPlaySvg');
+  svg.innerHTML = padPlaying
+    ? '<rect x="5.83" y="4.375" width="2.5" height="11.25" rx="2.5" fill="#121212"/><rect x="11.67" y="4.375" width="2.5" height="11.25" rx="2.5" fill="#121212"/>'
+    : '<path fill-rule="evenodd" clip-rule="evenodd" d="M15.262 8.93607C16.0485 9.42766 16.0485 10.5731 15.262 11.0647L7.72894 15.7731C6.89298 16.2956 5.80859 15.6946 5.80859 14.7088V5.29194C5.80859 4.30612 6.89298 3.70512 7.72894 4.22763L15.262 8.93607Z" fill="#121212"/>';
+}
+
+function togglePadPlay() {
+  padPlaying = !padPlaying;
+  clearInterval(padTimer);
+  if (padPlaying && effectiveBanners().length > 1) padTimer = setInterval(() => padStep(1), 3000);
+  padUpdateInd();
+}
+
+/* ---- PAD Scale ---- */
+let currentPadScale = 1;
+
+function updatePadScale() {
+  const outer = document.getElementById('padOuter');
+  const wrapper = document.getElementById('padWrapper');
+  if (!outer) return;
+  // PAD는 768px 고정(scale 1). 영역이 좁아지면 가운데 정렬 + 양쪽 잘림(overflow hidden).
+  currentPadScale = 1;
+  wrapper.style.transform = 'none';
+  outer.style.height = '1130px';
+}
+
+/* ---- PC Scale ---- */
+let currentPcScale = 1;
+
+function updatePcScale() {
+  const outer = document.getElementById('pcOuter');
+  const wrapper = document.getElementById('pcWrapper');
+  if (!outer) return;
+  currentPcScale = 1;
+  wrapper.style.transform = 'none';
+  outer.style.height = '1350px';
+}
+
+/* ---- Drag ---- */
+function initMoDrag() {
+  const area = document.getElementById('moBannerArea');
+  let startX = 0;
+  let dragging = false;
+
+  area.addEventListener('mousedown', e => {
+    if (effectiveBanners().length <= 1) return;
+    startX = e.clientX;
+    dragging = true;
+    clearInterval(moTimer);
+    area.classList.add('is-dragging');
+    document.getElementById('moTrack').style.transition = 'none';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const delta = e.clientX - startX;
+    document.getElementById('moTrack').style.transform = `translateX(${-moIdx * 375 + delta}px)`;
+  });
+
+  document.addEventListener('mouseup', e => {
+    if (!dragging) return;
+    dragging = false;
+    area.classList.remove('is-dragging');
+    const delta = e.clientX - startX;
+    if (Math.abs(delta) > 50) {
+      delta < 0 ? moStep(1) : moStep(-1);
+    } else {
+      moMove(true);
+    }
+    if (moPlaying && effectiveBanners().length > 1) moTimer = setInterval(() => moStep(1), 3000);
+  });
+}
+
+function initPadDrag() {
+  const viewport = document.getElementById('padViewport');
+  let startX = 0;
+  let dragging = false;
+
+  viewport.addEventListener('mousedown', e => {
+    if (effectiveBanners().length <= 1) return;
+    startX = e.clientX;
+    dragging = true;
+    clearInterval(padTimer);
+    viewport.classList.add('is-dragging');
+    document.getElementById('padTrack').style.transition = 'none';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const delta = (e.clientX - startX) / currentPadScale;
+    document.getElementById('padTrack').style.transform = `translateX(${PAD_OFFSET - padIdx * PAD_STEP + delta}px)`;
+  });
+
+  document.addEventListener('mouseup', e => {
+    if (!dragging) return;
+    dragging = false;
+    viewport.classList.remove('is-dragging');
+    const delta = (e.clientX - startX) / currentPadScale;
+    if (Math.abs(delta) > 100) {
+      delta < 0 ? padStep(1) : padStep(-1);
+    } else {
+      padMove(true);
+      if (padPlaying && effectiveBanners().length > 1) padTimer = setInterval(() => padStep(1), 3000);
+    }
+  });
+}
+
+function initPcDrag() {
+  const viewport = document.getElementById('pcViewport');
+  let startX = 0;
+  let dragging = false;
+
+  viewport.addEventListener('mousedown', e => {
+    if (effectiveBanners().length <= 1) return;
+    startX = e.clientX;
+    dragging = true;
+    clearInterval(pcTimer);
+    viewport.classList.add('is-dragging');
+    document.getElementById('pcTrack').style.transition = 'none';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const delta = (e.clientX - startX) / currentPcScale;
+    document.getElementById('pcTrack').style.transform = `translateX(${-pcIdx * PC_STEP + delta}px)`;
+  });
+
+  document.addEventListener('mouseup', e => {
+    if (!dragging) return;
+    dragging = false;
+    viewport.classList.remove('is-dragging');
+    const delta = (e.clientX - startX) / currentPcScale;
+    if (Math.abs(delta) > 100) {
+      delta < 0 ? pcStep(1) : pcStep(-1);
+      // pcStep이 타이머 재시작 담당
+    } else {
+      pcMove(true);
+      if (pcPlaying && effectiveBanners().length > 1) pcTimer = setInterval(() => pcStep(1), 3000);
+    }
+  });
+}
+
+/* ---- Tabs ---- */
+function switchTab(tab, el) {
+  document.querySelectorAll('.preview-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.preview-pane').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('pane-' + tab).classList.add('active');
+  if (tab === 'pc') requestAnimationFrame(updatePcScale);
+  if (tab === 'pad') requestAnimationFrame(updatePadScale);
+  requestAnimationFrame(updateObjGuides);
+  requestAnimationFrame(updateBrightBlocks);
+}
+
+/* ---- Drag & Drop ---- */
+let dragId = null;
+function dStart(e, id) { dragId = id; e.currentTarget.classList.add('dragging'); }
+function dOver(e) {
+  e.preventDefault();
+  document.querySelectorAll('.banner-item').forEach(el => el.classList.remove('drag-over'));
+  e.currentTarget.classList.add('drag-over');
+}
+function dDrop(e, toId) {
+  e.preventDefault();
+  if (dragId === toId) return;
+  const fi = banners.findIndex(b => b.id === dragId);
+  const ti = banners.findIndex(b => b.id === toId);
+  const [item] = banners.splice(fi, 1);
+  banners.splice(ti, 0, item);
+  save(); renderAll();
+}
+function dEnd() { document.querySelectorAll('.banner-item').forEach(el => el.classList.remove('dragging','drag-over')); }
+
+/* ---- Counter ---- */
+function updateCounter(inputId, counterId) {
+  const len = document.getElementById(inputId).value.length;
+  const el = document.getElementById(counterId);
+  if (el) el.textContent = len;
+}
+function resetCounters() {
+  ['cntTitle1','cntTitle2','cntSub'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = '0';
+  });
+}
+
+/* ---- Utils ---- */
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function renderAll() { renderList(); renderMo(); renderPad(); renderPc(); updateObjGuides(); updateBrightBlocks(); }
+
+/* ---- Init ---- */
+load();
+renderAll();
+toggleGuide(true);
+// 비어있거나 기본값 버전이 바뀌었으면 defaults.json으로 (재)시드 → 기존 방문자도 새 기본 배너 반영
+if (!banners.length || localStorage.getItem(VERSION_KEY) !== DEFAULTS_VERSION) loadDefaultsIfEmpty();
+setType('text'); // 첫 진입은 빈 '배너 등록' 화면으로
+initMoDrag();
+initPadDrag();
+initPcDrag();
+const ro = new ResizeObserver(updatePcScale);
+ro.observe(document.getElementById('pcOuter'));
+updatePcScale();
+const roPad = new ResizeObserver(updatePadScale);
+roPad.observe(document.getElementById('padOuter'));
+updatePadScale();
+</script>
+<div class="modal-backdrop" id="typeExampleModal" onclick="if(event.target===this)closeTypeExample()">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">배너 유형 예시</div>
+      <button class="modal-close" type="button" onclick="closeTypeExample()" aria-label="닫기"><svg viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 14 L31 31 M31 14 L14 31" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-tabs">
+        <button class="modal-tab active" data-img="type-example-text.png" onclick="switchExampleTab(this)">텍스트형</button>
+        <button class="modal-tab" data-img="type-example-logo.png" onclick="switchExampleTab(this)">로고형</button>
+        <button class="modal-tab" data-img="type-example-product-text.png" onclick="switchExampleTab(this)">상품조합형(텍스트)</button>
+        <button class="modal-tab" data-img="type-example-product-logo.png" onclick="switchExampleTab(this)">상품조합형(로고)</button>
+      </div>
+      <img class="modal-img" id="typeExampleImg" src="type-example-text.png" alt="">
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop" id="imageGuideModal" onclick="if(event.target===this)closeImageGuide()">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">이미지 제작 가이드</div>
+      <button class="modal-close" type="button" onclick="closeImageGuide()" aria-label="닫기"><svg viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 14 L31 31 M31 14 L14 31" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-tabs">
+        <button class="modal-tab active" data-img="image-guide-1.png?v=5" onclick="switchImageGuideTab(this)">위치/여백 가이드</button>
+        <button class="modal-tab" data-img="image-guide-2.png?v=3" onclick="switchImageGuideTab(this)">제품컷 예시</button>
+        <button class="modal-tab" data-img="image-guide-3.png?v=3" onclick="switchImageGuideTab(this)">인물컷 예시</button>
+        <button class="modal-tab" data-img="image-guide-4.png?v=5" onclick="switchImageGuideTab(this)">그라데이션 가이드</button>
+      </div>
+      <img class="modal-img" id="imageGuideImg" src="image-guide-1.png?v=5" alt="이미지 제작 가이드">
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop" id="logoGuideModal" onclick="if(event.target===this)closeLogoGuide()">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">로고 제작 가이드</div>
+      <button class="modal-close" type="button" onclick="closeLogoGuide()" aria-label="닫기"><svg viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 14 L31 31 M31 14 L14 31" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <img class="modal-img" id="logoGuideImg" src="logo-guide.png?v=1" alt="로고 제작 가이드">
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop" id="textGuideModal" onclick="if(event.target===this)closeTextGuide()">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">텍스트 입력 가이드</div>
+      <button class="modal-close" type="button" onclick="closeTextGuide()" aria-label="닫기"><svg viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 14 L31 31 M31 14 L14 31" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <img class="modal-img" id="textGuideImg" src="text-guide.png?v=1" alt="텍스트 입력 가이드">
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop" id="subLogoGuideModal" onclick="if(event.target===this)closeSubLogoGuide()">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">서브 로고 제작 가이드</div>
+      <button class="modal-close" type="button" onclick="closeSubLogoGuide()" aria-label="닫기"><svg viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 14 L31 31 M31 14 L14 31" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <img class="modal-img" id="subLogoGuideImg" src="sub-logo-guide.png?v=1" alt="서브 로고 제작 가이드">
+    </div>
+  </div>
+</div>
+</body>
+</html>
